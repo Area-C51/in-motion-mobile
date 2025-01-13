@@ -1,0 +1,11 @@
+# Assign @username to all files in the repository
+* @Spencer-Lau
+
+# Assign a specific team to a directory
+<!-- /src/ @team-name -->
+
+# Assign a specific user to a file
+<!-- /src/utils/helpers.js @username2 -->
+
+# Assign multiple reviewers
+<!-- /src/api/ @team-name @username3 -->
