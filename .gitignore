@@ -39,7 +39,7 @@ yarn-error.*
 
 app-example
 
-# Github Android README below
+# Github Android gitignore below
 
 # Gradle files
 .gradle/
@@ -75,5 +75,10 @@ google-services.json
 # Android Profiling
 *.hprof
 
+# Local gitignore below
+
 # Assets
 assets/**/in-motion*
+
+# Other files
+local-README.md
