@@ -4,7 +4,7 @@
     "slug": "in-motion-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/in-motion-black-icon.png",
+    "icon": "./assets/images/in-motion-black-icon-background.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -27,9 +27,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/in-motion-black-icon.png",
           "imageWidth": 200,
-          "resizeMode": "contain",
+          "resizeMode": "cover",
           "backgroundColor": "#ffffff"
         }
       ]
