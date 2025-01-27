@@ -81,6 +81,9 @@ google-services.json
 assets/**/in-motion*
 assets/images/ac51/
 
+# Other folders
+_temp/
+
 # Other files
 local-README.md
 *copy.tsx

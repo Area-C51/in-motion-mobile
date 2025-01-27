@@ -15,7 +15,9 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        // headerTitleAlign: 'center',
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
@@ -30,14 +32,28 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'house.fill' : 'house.fill'} color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'house.fill' : 'paperplane.fill'} color={color} />,
+        }}
+      />
+        <Tabs.Screen
+          name="how-to"
+          options={{
+            title: 'How To',
+            tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'house.fill' : 'paperplane.fill'} color={color} />,
+          }}
+        />
+      <Tabs.Screen
+        name="contact"
+        options={{
+          title: 'Contact',
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'people-outline' : 'people'} color={color} />,
         }}
       />
     </Tabs>
