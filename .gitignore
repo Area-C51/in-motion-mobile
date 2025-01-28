@@ -24,6 +24,7 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+.vscode/.react/
 
 # macOS
 .DS_Store
@@ -38,7 +39,7 @@ yarn-error.*
 
 app-example
 
-# Github Android README below
+# Github Android gitignore below
 
 # Gradle files
 .gradle/
@@ -74,5 +75,16 @@ google-services.json
 # Android Profiling
 *.hprof
 
+# Local gitignore below
+
 # Assets
 assets/**/in-motion*
+assets/images/ac51/
+
+# Other folders
+_temp/
+
+# Other files
+local-README.md
+*copy.tsx
+upload-exercises.js

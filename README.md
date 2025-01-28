@@ -1,22 +1,42 @@
-# in-motion-mobile
-
-# Welcome to your Expo app 👋
+# Welcome In Motion Mobile
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
 
-1. Install dependencies
+### Development instructions
+
+1. Clone repository
+
+2. Install dependencies
 
    ```bash
    npm install
    ```
+   
+3. To start the app
 
-2. Start the app
+   Currently only runs in a browser
 
    ```bash
-    npx expo start
+   npm start
    ```
+
+   or
+
+   ```bash
+   npx expo start
+   ```
+
+4. To run project on Android
+
+   Must use a tunnel at this time
+
+   ```bash
+   npx expo start --tunnel 
+   ```
+   
+### Notes
 
 In the output, you'll find options to open the app in a
 
