@@ -15,7 +15,9 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        // headerTitleAlign: 'center',
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
@@ -30,14 +32,36 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'house.fill' : 'house.fill'} color={color} accessibilityLabel='Home Tab' accessibilityHint='Navigate to the Home screen.' />,
+          // added accessibility props, needed to update the props definition to include accessibilityLabel and accessibilityHint in IconSymbol
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'search' : 'search'} color={color} accessibilityLabel='Search Tab' accessibilityHint='Navigate to the Search screen.' />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'paperplane.fill' : 'paperplane.fill'} color={color} accessibilityLabel='Explore Tab' accessibilityHint='Navigate to the Explore screen.' />,
+        }}
+      />
+        <Tabs.Screen
+          name="how-to"
+          options={{
+            title: 'How To',
+            tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'menu-book' : 'menu-book'} color={color} accessibilityLabel='How To Tab' accessibilityHint='Navigate to the How To screen.' />,
+          }}
+        />
+      <Tabs.Screen
+        name="contact"
+        options={{
+          title: 'Contact',
+          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'people-outline' : 'people'} color={color} accessibilityLabel='Contact Us Tab' accessibilityHint='Navigate to the Contact Us screen.' />,
         }}
       />
     </Tabs>
