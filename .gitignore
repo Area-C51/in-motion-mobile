@@ -79,7 +79,7 @@ google-services.json
 
 # Assets
 assets/**/in-motion*
-assets/images/ac51/
+assets/**/ac51*
 
 # Other folders
 _temp/
@@ -87,4 +87,11 @@ _temp/
 # Other files
 local-README.md
 *copy.tsx
-upload-exercises.js
+
+# Allow a specific assets
+!ac51-cobalt.png
+!in-motion-black-icon.png
+!in-motion-black-icon-background.png
+!in-motion-orangegold-favicon.png
+!in-motion-orangegold-icon.png
+!in-motion-white-icon.png
