@@ -13,17 +13,17 @@ const App = () => {
         resizeMode='cover'
         style={styles.backgroundImage}
       >
-      <Text style={styles.title}>In Motion Mobile</Text>
-      <Link href='/explore' style={{ marginHorizontal: 'auto' }} asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Explore</Text>
-        </Pressable>
-      </Link>
-      <Link href='/contact' style={{ marginHorizontal: 'auto' }} asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Contact Us</Text>
-        </Pressable>
-      </Link>
+        <Text style={styles.title}>In Motion Mobile</Text>
+        {/* <Link href='/explore' style={{ marginHorizontal: 'auto' }} asChild>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Explore</Text>
+          </Pressable>
+        </Link>
+        <Link href='/contact' style={{ marginHorizontal: 'auto' }} asChild>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Contact Us</Text>
+          </Pressable>
+        </Link> */}
       </ImageBackground>
     </View>
   )
