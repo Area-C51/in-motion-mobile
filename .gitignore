@@ -87,6 +87,7 @@ _temp/
 # Other files
 local-README.md
 *copy.tsx
+*copy.txt
 
 # Allow a specific assets
 !ac51-cobalt.png

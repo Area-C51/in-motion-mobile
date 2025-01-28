@@ -13,7 +13,7 @@ export default function TabTwoScreen() {
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
         <Image
-          source={require('@/assets/images/ac51/ac51-cobalt.png')}
+          source={require('@/assets/images/ac51-cobalt.png')}
           style={styles.ac51Logo}
         />
       }>
