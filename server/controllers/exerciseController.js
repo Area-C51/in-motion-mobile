@@ -30,7 +30,7 @@ export const searchExercises = async (req, res, next) => { // controller handlin
     queryParams.push(category); // assuming `category` is a string (e.g., 'strength')
   }
 
-  query += ` LIMIT 1;`; // hard coded LIMIT to 1 for testing/debugging purposes, REMOVE AFTERWARDS FOR PRODUCTION
+  query += ` LIMIT 3;`; // hard coded LIMIT to 3 for testing/debugging purposes, REMOVE AFTERWARDS FOR PRODUCTION
 
   try { // execute query and handle response
     const result = await db.query(query, queryParams); // execute the query with the dynamic conditions

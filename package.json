@@ -10,6 +10,7 @@
   "scripts": {
     "install-all": "concurrently \"npx expo install\" \"npm install --prefix server\"",
     "start": "concurrently \"npx expo start -c --tunnel\" \"npm run start --prefix server\"",
+    "start-back": "npm run start --prefix server",
     "expo start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",

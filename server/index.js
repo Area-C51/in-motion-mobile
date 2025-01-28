@@ -50,6 +50,6 @@ app.use((err, req, res, next) => { // global error handling middleware
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(PORT, () => { // start server
+app.listen(PORT, '0.0.0.0', () => { // start server, currently listens to PORT as well as on all available network interfaces
   console.log(`server listening on port ${PORT}`)
 });
