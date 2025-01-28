@@ -7,6 +7,12 @@ import { Picker } from '@react-native-picker/picker';
 
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
 
+interface QueryParams { // define a type for the query parameters
+  id?: string;
+  muscle?: string;
+  category?: string;
+}
+
 const App = () => {
   const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text (ref: Unit6 TicTacToe)
   const [responseResults, setResponseResults] = useState([]); // sets state for responseResults to results of search from backend
@@ -21,7 +27,7 @@ const App = () => {
   
   const exerciseSearch = async () => { // non-AI assisted exercise search functionality
     const { searchTerm } = getSearchInputs();
-    const queryParams = {};
+    const queryParams: QueryParams = {};
     
     // only add the parameters that are non-empty
     if (searchTerm) queryParams.id = searchTerm; // include the search term if provided
@@ -34,7 +40,7 @@ const App = () => {
     }
 
     try {
-      const query = new URLSearchParams(queryParams).toString(); // construct the query string using URLSearchParams
+      const query = new URLSearchParams(queryParams as Record<string, string>).toString(); // construct the query string using URLSearchParams directly from queryParams
       const response = await fetch(`http://localhost:8080/api/search?${query}`);
       if (!response.ok) throw new Error('Failed to fetch data from the server');
       const data = await response.json();
