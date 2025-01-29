@@ -22,46 +22,71 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
+            // use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
           default: {},
         }),
+        tabBarLabelPosition: 'below-icon', // places labels below the icons
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'house.fill' : 'house.fill'} color={color} accessibilityLabel='Home Tab' accessibilityHint='Navigate to the Home screen.' />,
-          // added accessibility props, needed to update the props definition to include accessibilityLabel and accessibilityHint in IconSymbol
+          tabBarIcon: ({ color,focused }) => (
+            <IconSymbol size={28} name={focused ? 'house.fill' : 'house'} color={color} accessibilityLabel='Home Tab' accessibilityHint='Navigate to the Home screen.' />
+          ),
+          tabBarLabel: 'Home',
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'search' : 'search'} color={color} accessibilityLabel='Search Tab' accessibilityHint='Navigate to the Search screen.' />,
+          tabBarIcon: ({ color,focused }) => (
+            <IconSymbol size={28} name={focused ? 'magnifyingglass.circle.fill' : 'magnifyingglass.circle'} color={color} accessibilityLabel='Search Tab' accessibilityHint='Navigate to the Search screen.' />
+          ),
+          tabBarLabel: 'Search',
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'paperplane.fill' : 'paperplane.fill'} color={color} accessibilityLabel='Explore Tab' accessibilityHint='Navigate to the Explore screen.' />,
+          tabBarIcon: ({ color,focused }) => (
+            <IconSymbol size={28} name={focused ? 'paperplane.fill' : 'paperplane'} color={color} accessibilityLabel='Explore Tab' accessibilityHint='Navigate to the Explore screen.' />
+          ),
+          tabBarLabel: 'Explore',
         }}
       />
         <Tabs.Screen
           name="how-to"
           options={{
             title: 'How To',
-            tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'menu-book' : 'menu-book'} color={color} accessibilityLabel='How To Tab' accessibilityHint='Navigate to the How To screen.' />,
+            tabBarIcon: ({ color,focused }) => (
+              <IconSymbol size={28} name={focused ? 'book.fill' : 'book'} color={color} accessibilityLabel='How To Tab' accessibilityHint='Navigate to the How To screen.' />
+            ),
+            tabBarLabel: 'How To',
           }}
         />
       <Tabs.Screen
         name="contact"
         options={{
           title: 'Contact',
-          tabBarIcon: ({ color,focused }) => <IconSymbol size={28} name={focused ? 'people-outline' : 'people'} color={color} accessibilityLabel='Contact Us Tab' accessibilityHint='Navigate to the Contact Us screen.' />,
+          tabBarIcon: ({ color,focused }) => (
+            <IconSymbol size={28} name={focused ? 'person.2' : 'person.3'} color={color} accessibilityLabel='Contact Us Tab' accessibilityHint='Navigate to the Contact Us screen.' />
+          ),
+          tabBarLabel: 'Contact',
+        }}
+      />
+      <Tabs.Screen
+        name="test"
+        options={{
+          title: 'Test',
+          tabBarIcon: ({ color,focused }) => (
+            <IconSymbol size={28} name={focused ? 'wand.and.rays.inverse' : 'wand.and.stars'} color={color} accessibilityLabel='Test Tab' accessibilityHint='Navigate to the Test screen.' />
+          ),
+          tabBarLabel: 'Test',
         }}
       />
     </Tabs>

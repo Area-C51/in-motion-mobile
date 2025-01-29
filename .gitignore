@@ -88,6 +88,7 @@ _temp/
 local-README.md
 *copy.tsx
 *copy.txt
+upload-exercises.js
 
 # Allow a specific assets
 !ac51-cobalt.png
