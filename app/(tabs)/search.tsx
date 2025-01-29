@@ -1,10 +1,9 @@
 // rnfe -> reactNativeFunctionalExportComponent
 
-import { ActivityIndicator, Alert, Dimensions, FlatList, Image, ImageBackground, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-// import { Link } from 'expo-router';
+import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, Image, ImageBackground, Modal, Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react'; // import React and useState (to manage state) and useRef (creates a reference) React hooks
-import { IconSymbol } from '@/components/ui/IconSymbol';
 // import { Picker } from '@react-native-picker/picker';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
 
@@ -42,20 +41,40 @@ const scaleFontSize = (size: number) => {
 // },
 
 const App = () => {
-  const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allow dynamic colors, possible use with themes
-  const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text (ref: Unit6 TicTacToe)
-  const [responseResults, setResponseResults] = useState<Exercise[]>([]); // sets state for responseResults to results of search from backend
-  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null); // state to track expanded exercise on hover
-  const [loading, setLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // state for the selected image
+  const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allows dynamic colors, possible use with themes
 
+  const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text (ref: Unit6 TicTacToe)
+  const [responseResults, setResponseResults] = useState<Exercise[]>([]); // sets state for responseResults, db results from back-end
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // state for the selected image to expand
+  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null); // state to track expanded exercise on click
+
+  const [loading, setLoading] = useState(false);
+
+  const [isMenuVisible, setIsMenuVisible] = useState(false); // search settings menu
+  const [dropdownsEnabled, setDropdownsEnabled] = useState(false); // additional search dropdowns
+  const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
+
+  const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
+
+  // sliding animation for the search settings menu
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: isMenuVisible ? 0 : 150,  // slide to 0 (visible) or 150 (hidden)
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  }, [isMenuVisible]);
+  
+  const toggleSearchMenu = () => {
+    setIsMenuVisible(prevState => !prevState);
+  };
+  
   // helper function to retrieve input values
   const getSearchInputs = () => { // input retrieval helper function
     return {
       searchTerm: searchEntry.trim() || '', // get the search term
     };
   };
-
   
   const exerciseSearch = async () => { // non-AI assisted exercise search functionality
     const { searchTerm } = getSearchInputs();
@@ -89,9 +108,9 @@ const App = () => {
   const renderExerciseItem = ({ item }: { item: Exercise }) => (
     <View key={item.id} style={styles.resultItem}>
       <Text style={styles.exerciseName}>{item.name}</Text>
-      <Pressable
+      <TouchableOpacity
         style={styles.addButton}
-        onPress={() => {/* Opens menu to add to workout */}}
+        onPress={() => {/* Opens menu to add to workout */}} // WIP
         accessibilityLabel="Add exercie to workouts"
         accessibilityHint="Tap to add this exercise to your workouts"
         accessible={true} // ensures focusable by the screen reader
@@ -99,7 +118,7 @@ const App = () => {
         onFocus={() => console.log("Button focused")}
       >
         <Text style={styles.addText}>+</Text>
-      </Pressable>
+      </TouchableOpacity>
       <View style={styles.imageContainer}>
       {Array.isArray(item.images) ? (
         item.images.map((imageUrl, index) => (
@@ -107,11 +126,11 @@ const App = () => {
             key={index}
             style={[
               styles.pressableImage,
-              { marginRight: index === item.images.length - 1 ? 0 : 5 }, // dynamically set marginRight
+              { marginRight: index === item.images.length - 1 ? 0 : 5 }, // dynamically set marginRight (creates center space without adding right margin to 2nd of paired images)
             ]}
             onPress={() => setSelectedImage(imageUrl)}
             accessibilityLabel="Expand Image"
-            accessibilityHint={`Tap to expand this image for ${item.id}`}
+            accessibilityHint={`Tap to expand this image for ${item.name}`}
             accessible={true}
             focusable={true}
             onFocus={() => console.log("Button focused")}
@@ -119,7 +138,7 @@ const App = () => {
             <Image
               source={{ uri: imageUrl }}
               style={styles.exerciseImage}
-              accessibilityLabel={`Exercise image for ${item.id}`}
+              accessibilityLabel={`Exercise image for ${item.name}`}
             />
           </Pressable>
         ))
@@ -131,7 +150,7 @@ const App = () => {
         onPress={() => setExpandedExerciseId(expandedExerciseId === item.id ? null : item.id)}
         style={styles.expandButton}
         accessibilityLabel="Expand Exercise Details"
-        accessibilityHint={`Tap to expand exercise details for ${item.id}`}
+        accessibilityHint={`Tap to expand exercise details for ${item.name}`}
         accessible={true}
         focusable={true}
         onFocus={() => console.log("Button focused")}
@@ -165,9 +184,14 @@ const App = () => {
             value={searchEntry} // bind the TextInput to state
             onChangeText={setSearchEntry} // update the searchEntry state as the user types
             onSubmitEditing={exerciseSearch} // trigger search when "Enter" is pressed
+            accessibilityLabel="Search for exercises"
+            accessibilityHint="Enter the name of an exercise to search"
+            accessible={true}
+            focusable={true}
+            onFocus={() => console.log("Search bar focused")}
           />
           {searchEntry ? (
-            <Pressable
+            <TouchableOpacity
               style={styles.clearButton}
               onPress={() => setSearchEntry('')}
               accessibilityLabel="Clear Search Bar"
@@ -177,11 +201,11 @@ const App = () => {
               onFocus={() => console.log("Button focused")}      
             >
               <Text style={styles.clearText}>X</Text>
-            </Pressable>
+            </TouchableOpacity>
           ) : null}
-          <Pressable
+          <TouchableOpacity
             style={styles.searchSettingsButton}
-            onPress={() => setSearchEntry('')}
+            onPress={toggleSearchMenu}
             accessibilityLabel="Open search settings"
             accessibilityHint="Tap to open the search settings menu"
             accessible={true}
@@ -189,7 +213,31 @@ const App = () => {
             onFocus={() => console.log("Button focused")}
           >
             <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
-          </Pressable>
+          </TouchableOpacity>
+          {isMenuVisible && (
+            <Animated.View style={[styles.searchMenuContainer, { transform: [{ translateX: slideAnim }] }]}>
+              <View style={styles.searchMenuOption}>
+                <Text style={styles.searchMenuText}>Dropdowns</Text>
+                <Switch
+                  style={styles.searchSwitch}
+                  value={dropdownsEnabled}
+                  onValueChange={setDropdownsEnabled}
+                  accessibilityLabel="Toggle Dropdowns"
+                  accessibilityHint="Toggles between Dropdown search options on or off"
+                />
+              </View>
+              <View style={styles.searchMenuOption}>
+                <Text style={styles.searchMenuText}>AI Assist</Text>
+                <Switch
+                  style={styles.searchSwitch}
+                  value={aiEnabled}
+                  onValueChange={setAiEnabled}
+                  accessibilityLabel="Toggle AI Assist"
+                  accessibilityHint="Toggles between basic search and AI assisted search"
+                />
+              </View>
+            </Animated.View>
+          )}
         </View>
 
         {/* Results container displays exercice items if present */}
@@ -261,11 +309,11 @@ const styles = StyleSheet.create({
   searchInput: {
     height: 45,
     width: '100%',
-    fontSize: scaleFontSize(16),
+    fontSize: 16, // search bar is a set height, thus font is set size
     borderColor: '#aaa',
     borderWidth: 1,
     paddingLeft: 10,
-    paddingRight: 70, // space for the "X" button
+    paddingRight: 70, // space for the "X" and search menu buttons
     backgroundColor: '#fff',
   },
   clearButton: {
@@ -295,6 +343,32 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 
+  // Search Settings Menu
+  searchMenuContainer: {
+    position: 'absolute',
+    top: 65, // position below the button
+    right: 0,
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 5, // Android shadow
+  },
+  searchMenuOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  searchMenuText: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  searchSwitch: {},
+
   // Results List
   resultsContainer: {
     flex: 1,
@@ -310,7 +384,7 @@ const styles = StyleSheet.create({
 
   // Exercise Header
   exerciseName: {
-    fontSize: scaleFontSize(20),
+    fontSize: scaleFontSize(20),  // relative to screen width
     fontWeight: 'bold',
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
     padding: 5,

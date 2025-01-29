@@ -1,9 +1,15 @@
 // rnfe -> reactNativeFunctionalExportComponent
 
-import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
+import { Dimensions, ImageBackground, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router';
 // import React from 'react';
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
+
+const { width, height } = Dimensions.get('window');
+// container: {
+//   height: height * 0.8, // 80% of the screen height
+//   width: width * 0.9, // 90% of the screen width
+// },
 
 const App = () => {
   return (
@@ -13,17 +19,8 @@ const App = () => {
         resizeMode='cover'
         style={styles.backgroundImage}
       >
-        <Text style={styles.title}>In Motion Mobile</Text>
-        {/* <Link href='/explore' style={{ marginHorizontal: 'auto' }} asChild>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Explore</Text>
-          </Pressable>
-        </Link>
-        <Link href='/contact' style={{ marginHorizontal: 'auto' }} asChild>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Contact Us</Text>
-          </Pressable>
-        </Link> */}
+        <Text style={styles.ideas}>Grid of 4 buttons for recent workouts?</Text>
+        <Text style={styles.ideas}>Random or even suggested exercises?</Text>
       </ImageBackground>
     </View>
   )
@@ -37,47 +34,28 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   backgroundImage: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'white',
-    flex: 1,
+    width: Math.min(width, height),
+    height: Math.min(width, height),
+    // backgroundColor: 'white',
+    // flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
     alignItems: 'center',
+    transform: [{ translateY: width * 0.5 }],
   },
-  title: {
+  ideas: {
     borderRadius: 10,
-    color: 'black',
-    fontSize: 42,
-    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 20,
     textAlign: 'center',
-    backgroundColor: 'rgba(180,20,220,0.5)',
-    padding: 6,
-    marginBottom: 120,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 10,
+    margin: 10,
+    marginTop: 50,
   },
-  link: {
-    color: 'black',
-    fontSize: 42,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 4,
-  },
-  button: {
-    height: 30,
-    borderRadius: 5,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(220,20,220,0.75)',
-    padding: 0,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    // textDecorationLine: 'underline',
-    // backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 4,
-  }
+// ideas: {
+//   height: height * 0.8,
+//   width: width * 0.9,
+// },
+
 })
