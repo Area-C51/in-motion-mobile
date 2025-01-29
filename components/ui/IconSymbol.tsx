@@ -9,14 +9,21 @@ import { AccessibilityProps, OpaqueColorValue, StyleProp, TextStyle } from 'reac
 const MAPPING = {
   // See MaterialIcons here: https://icons.expo.fyi
   // See SF Symbols in the SF Symbols app on Mac.
-  'house.fill': 'home',
-  'paperplane.fill': 'send',
+  'house': 'home',
+  'house.fill': 'house',
+  'paperplane': 'keyboard-double-arrow-right',
+  'paperplane.fill': 'double-arrow',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
-  'people': 'people',
-  'people-outline': 'people-outline',
-  'search': 'search',
-  'menu-book': 'menu-book',
+  'person.2': 'people-outline',
+  'person.3': 'people',
+  'magnifyingglass.circle': 'search',
+  'magnifyingglass.circle.fill': 'saved-search',
+  'book': 'menu-book',
+  'book.fill': 'menu-book',
+  'ellipsis': 'menu',
+  'xmark': 'remove',
+  'line.horizontal.3': 'menu-open'
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],
