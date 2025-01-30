@@ -2,7 +2,7 @@
 
 import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, Image, ImageBackground, Modal, Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react'; // import React and useState (to manage state) and useRef (creates a reference) React hooks
-// import { Picker } from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
@@ -22,6 +22,7 @@ interface QueryParams { // define a type for the query parameters
   id?: string;
   muscle?: string;
   category?: string;
+  searchEntry?: string;
 }
 
 // allows dynamic styles with width and height specific to the screen dimensions
@@ -42,16 +43,24 @@ const scaleFontSize = (size: number) => {
 
 const App = () => {
   const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allows dynamic colors, possible use with themes
+  
+  const [muscleOptions, setMuscleOptions] = useState([]); // state for muscle options
+  const [categoryOptions, setCategoryOptions] = useState([]); // state for category options
+  const [fetchDropdownOptions, setfetchDropdownOptions] = useState(true); // status flag to ensure dropdown options data only occurs once
 
-  const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text (ref: Unit6 TicTacToe)
+  const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text
+  const [muscle, setMuscle] = useState('');
+  const [category, setCategory] = useState('');
+
   const [responseResults, setResponseResults] = useState<Exercise[]>([]); // sets state for responseResults, db results from back-end
+  const [aiResponse, setAIResponse] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // state for the selected image to expand
   const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null); // state to track expanded exercise on click
 
   const [loading, setLoading] = useState(false);
 
   const [isMenuVisible, setIsMenuVisible] = useState(false); // search settings menu
-  const [dropdownsEnabled, setDropdownsEnabled] = useState(false); // additional search dropdowns
+  const [dropdownsEnabled, setDropdownsEnabled] = useState(true); // additional search dropdowns
   const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
 
   const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
@@ -68,7 +77,38 @@ const App = () => {
   const toggleSearchMenu = () => {
     setIsMenuVisible(prevState => !prevState);
   };
-  
+
+  useEffect(() => { // fetch muscle and category options from backend
+    if (!fetchDropdownOptions) return;
+    const fetchOptions = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/dropdown-options');
+        if (!response.ok) throw new Error('Failed to fetch options');
+        const data = await response.json();
+        
+        const sortedMuscles = data.muscles.sort((a: string, b: string) => a.localeCompare(b)); // sort muscle options
+        const sortedCategories = data.categories.sort((a: string, b: string) => a.localeCompare(b)); // sort category options
+
+        setMuscleOptions(sortedMuscles); // set muscle options/state after sorting
+        setCategoryOptions(sortedCategories); // set category options/state after sorting
+        setfetchDropdownOptions(false); // set status flag to false after fetching data once
+      } catch (error) {
+        console.error('Error fetching options:', error);
+        setfetchDropdownOptions(false); // set status flag to false even if an error occurs
+      }
+    };
+    fetchOptions();
+
+    // ********** ********** ********** ********** ********** ********** ********** ********** ********** **********
+    // USED FOR DEBUGGING MULTIPLE MOUNTS OCCURING WITH useEffect FOR setMuscleOptions AND setCategoryOptions
+    // ********** ********** ********** ********** ********** ********** ********** ********** ********** **********
+    // console.log('Component mounted');
+    // return () => {
+    //   console.log('Component unmounted');
+    // };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // empty dependency array means this effect runs once when the component mounts
+
   // helper function to retrieve input values
   const getSearchInputs = () => { // input retrieval helper function
     return {
@@ -82,8 +122,8 @@ const App = () => {
     
     // only add the parameters that are non-empty
     if (searchTerm) queryParams.id = searchTerm; // include the search term if provided
-    // if (muscle) queryParams.muscle = muscle; // include muscle if selected
-    // if (category) queryParams.category = category; // include category if selected
+    if (muscle) queryParams.muscle = muscle; // include muscle if selected
+    if (category) queryParams.category = category; // include category if selected
 
     if (Object.keys(queryParams).length === 0) { // if no filter or search term is provided, show an alert and stop the search
       Alert.alert('Please enter a search term or select a filter');
@@ -105,6 +145,53 @@ const App = () => {
     }
   };
 
+  const aiExerciseSearch = async () => { // AI-assisted exercise search functionality
+    // eslint-disable-next-line no-unused-vars
+    const { searchTerm } = getSearchInputs();
+
+    const queryParams: QueryParams = {}; // initial queryParams object
+
+    // const queryParams = { query: searchTerm }; // AI query parameter
+    if (searchTerm) queryParams.searchEntry = searchTerm;
+    // if (muscle) queryParams.muscle = muscle;
+    // if (category) queryParams.category = category;
+
+    console.log('aiExerciseSearch queryParams: ', queryParams)
+    if (!searchTerm) {
+      Alert.alert('Please enter a search.');
+      return;
+    }
+
+    setLoading(true); // start loading
+    // setError(''); // reset any previous errors
+  
+    try {
+      const query = new URLSearchParams(queryParams.searchEntry).toString();
+
+      const response = await fetch(`http://localhost:8080/api/aisearch?${query}`, { // fetch AI response from the backend
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          searchEntry: searchTerm,
+          // id: searchTerm,
+          // muscle,
+          // category
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch data from the server');
+      const data = await response.json();
+      setAIResponse(data); // sets responseResults state with AI response data
+      setSearchEntry(''); // resets search box to an empty string after each search
+    } catch (error) {
+      console.error('Error: ', error);
+      Alert.alert('Something went wrong with the AI assisted query. Please try again.');
+    } finally {
+      setLoading(false); // Stop loading when done
+    }
+  };
+
+  // each exercise item of the results container
   const renderExerciseItem = ({ item }: { item: Exercise }) => (
     <View key={item.id} style={styles.resultItem}>
       <Text style={styles.exerciseName}>{item.name}</Text>
@@ -177,19 +264,22 @@ const App = () => {
         resizeMode='cover'
         style={styles.backgroundImage}
       >
+        {/* Search container, runs basic or AI assisted search if toggled on */}
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
             placeholder="Search exercises by name"
             value={searchEntry} // bind the TextInput to state
             onChangeText={setSearchEntry} // update the searchEntry state as the user types
-            onSubmitEditing={exerciseSearch} // trigger search when "Enter" is pressed
+            onSubmitEditing={aiEnabled ? aiExerciseSearch : exerciseSearch} // trigger search when "Enter" is pressed
             accessibilityLabel="Search for exercises"
             accessibilityHint="Enter the name of an exercise to search"
             accessible={true}
             focusable={true}
             onFocus={() => console.log("Search bar focused")}
           />
+  
+          {/* Clear button is conditionally displayed if actively searching */}
           {searchEntry ? (
             <TouchableOpacity
               style={styles.clearButton}
@@ -203,6 +293,8 @@ const App = () => {
               <Text style={styles.clearText}>X</Text>
             </TouchableOpacity>
           ) : null}
+
+          {/* Search setting button to open search settings menu */}
           <TouchableOpacity
             style={styles.searchSettingsButton}
             onPress={toggleSearchMenu}
@@ -214,6 +306,8 @@ const App = () => {
           >
             <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
           </TouchableOpacity>
+
+          {/* Search settings menu */}
           {isMenuVisible && (
             <Animated.View style={[styles.searchMenuContainer, { transform: [{ translateX: slideAnim }] }]}>
               <View style={styles.searchMenuOption}>
@@ -240,6 +334,46 @@ const App = () => {
           )}
         </View>
 
+        {/* Dropdown container displays dropdowns and submit button if toggled*/}
+        {dropdownsEnabled ? (
+          <View style={styles.dropdownContainer}>
+            <Picker
+            selectedValue={muscle}
+            onValueChange={(itemValue) => setMuscle(itemValue)}
+            style={styles.dropdown}
+            >
+              <Picker.Item label="Select Muscle" value="" />
+              {muscleOptions.map((m, index) => (
+                <Picker.Item key={index} label={m} value={m} />
+              ))}
+            </Picker>
+
+            {/* Category Picker */}
+            <Picker
+              selectedValue={category}
+              onValueChange={(itemValue) => setCategory(itemValue)}
+              style={styles.dropdown}
+            >
+              <Picker.Item label="Select Category" value="" />
+              {categoryOptions.map((c, index) => (
+                <Picker.Item key={index} label={c} value={c} />
+              ))}
+            </Picker>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={exerciseSearch} // only works with basic search
+              accessibilityLabel="Search for exercises with dropdowns"
+              accessibilityHint="Use the dropdowns for muscles or exercise categories to search"
+              accessible={true}
+              focusable={true}
+              onFocus={() => console.log("Search button focused")}
+            >
+              <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
+            </TouchableOpacity>
+          </View>
+          ) : null
+        }
+
         {/* Results container displays exercice items if present */}
         <View style={styles.resultsContainer}>
           {loading && <ActivityIndicator size="large" color="#0000ff" />}
@@ -250,7 +384,7 @@ const App = () => {
               keyExtractor={(item) => item.id}
             />
           ) : (
-            <Text>Please search for an exercise</Text>
+            <Text style={[styles.exerciseName, {top: 50}]}>Please search for an exercise</Text>
           )}
         </View>
       </ImageBackground>
@@ -301,9 +435,9 @@ const styles = StyleSheet.create({
   // Search Bar
   searchContainer: {
     position: 'absolute',
-    top: 0,
+    top: 35, // space for the status bar on mobile
     width: '100%',
-    paddingTop: 20, // space for the status bar on mobile
+    justifyContent: 'center',
     zIndex: 1,
   },
   searchInput: {
@@ -315,12 +449,17 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 70, // space for the "X" and search menu buttons
     backgroundColor: '#fff',
+    zIndex: 2,
   },
   clearButton: {
+    height: 45,
+    width: 50,
+    // borderWidth: 1, // only to visualize the button over the search bar
     position: 'absolute',
-    right: 50,
-    top: '50%',
-    transform: [{ translateY: -5 }],
+    right: 20,
+    paddingLeft: 10,
+    justifyContent: 'center',
+    zIndex: 3,
   },
   clearText: {
     fontSize: 20,
@@ -340,13 +479,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignContent: 'center',
     justifyContent: 'center',
-    zIndex: 1,
+    zIndex: 4,
   },
 
   // Search Settings Menu
   searchMenuContainer: {
     position: 'absolute',
-    top: 65, // position below the button
+    top: 45, // position below the button
     right: 0,
     backgroundColor: '#FFF',
     padding: 10,
@@ -361,19 +500,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   searchMenuText: {
     fontSize: 16,
-    marginRight: 10,
+    marginRight: 5,
   },
-  searchSwitch: {},
+  searchSwitch: {
+  },
+  
+  // Dropdown Options
+  dropdownContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+    height: 40,
+    width: '100%',
+    position: 'relative',
+    top: 80, // space below the search bar
+  
+    borderColor: '#aaa',
+    borderWidth: 1,
+    paddingRight: 40,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // zIndex: 1,
+  },
+  dropdown: {
+    height: 50,
+    width: '50%',
+  },
+  submitButton: {
+    height: 40,
+    width: 40,
+    position: 'absolute',
+    right: 0,
+    borderColor: '#aaa',
+    borderWidth: 1,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    padding: 5,
+  },
 
   // Results List
   resultsContainer: {
     flex: 1,
+    position: 'relative',
     width: '100%',
-    paddingTop: 70, // space for search bar
+    top: 80, // space for search bar
     paddingLeft: 10,
     paddingRight: 10,
     // overflow: 'scroll', // optional, for enforcing scroll behavior

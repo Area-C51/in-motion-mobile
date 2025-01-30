@@ -11,8 +11,8 @@ const MAPPING = {
   // See SF Symbols in the SF Symbols app on Mac.
   'house': 'home', // home tab
   'house.fill': 'house',
-  'magnifyingglass.circle': 'search', // search tab
-  'magnifyingglass.circle.fill': 'saved-search',
+  'magnifyingglass.circle.fill': 'search', // search tab
+  'magnifyingglass.circle': 'saved-search',
   'paperplane': 'keyboard-double-arrow-right', // explore tab
   'paperplane.fill': 'double-arrow',
   'book': 'local-library', // how to tab
@@ -22,6 +22,7 @@ const MAPPING = {
   'wand.and.stars': 'auto-fix-normal', // test tab
   'wand.and.rays.inverse': 'auto-fix-high',
   'line.horizontal.3': 'menu-open', // search settings menu
+  'magnifyingglass': 'search', // dropdown submit button
   'xmark': 'remove', // tbd
   'ellipsis': 'menu', // tbd
   'chevron.left.forwardslash.chevron.right': 'code', // none
