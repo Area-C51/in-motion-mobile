@@ -1,0 +1,18 @@
+import React from 'react';
+import { render } from '@testing-library/react-native';
+import App from '../app/(tabs)/index'; // Adjust path if needed
+
+describe('Index Screen', () => {
+  it('renders correctly', () => {
+    const { getByText } = render(<App />);
+    expect(
+      getByText('Grid of 4 buttons for recent workouts?')
+    ).toBeTruthy();
+    expect(getByText('Random or even suggested exercises?')).toBeTruthy();
+  });
+
+  it('renders background image', () => {
+    const { getByTestId } = render(<App />);
+    expect(getByTestId('background-image')).toBeTruthy();
+  });
+});
