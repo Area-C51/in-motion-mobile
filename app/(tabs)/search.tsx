@@ -243,13 +243,15 @@ const App = () => {
         onFocus={() => console.log("Button focused")}
       >
         {expandedExerciseId === item.id ? (
-          <>
+          <View
+          accessibilityLabel="Expanded Exercise Details"
+          accessibilityHint={`Tap to collapse exercise details for ${item.name}`}>
             <Text>Force: {item.force}</Text>
             <Text>Level: {item.level}</Text>
             <Text>Mechanic: {item.mechanic}</Text>
             <Text>Equipment: {item.equipment}</Text>
             <Text>Instructions: {item.instructions}</Text>
-          </>
+          </View>
         ) : (
           <Text style={styles.expandButtonText}>Tap to Expand</Text>
         )}

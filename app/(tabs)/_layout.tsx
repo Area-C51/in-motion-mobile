@@ -80,9 +80,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="test"
+        name="test-sheet"
         options={{
-          title: 'Test',
+          title: 'Test Sheet',
           tabBarIcon: ({ color,focused }) => (
             <IconSymbol size={28} name={focused ? 'wand.and.rays.inverse' : 'wand.and.stars'} color={color} accessibilityLabel='Test Tab' accessibilityHint='Navigate to the Test screen.' />
           ),

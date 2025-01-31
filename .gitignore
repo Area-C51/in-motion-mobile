@@ -83,6 +83,7 @@ assets/**/ac51*
 
 # Other folders
 _temp/
+__tests__
 
 # Other files
 local-README.md
