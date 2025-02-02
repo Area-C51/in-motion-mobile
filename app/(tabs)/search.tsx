@@ -40,7 +40,7 @@ const scaleFontSize = (size: number) => {
 //   fontSize: scaleFontSize(16), // Scale text size based on screen width
 // },
 
-const App = () => {
+export default function Search() {
   const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allows dynamic colors, possible use with themes
 
   const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text (ref: Unit6 TicTacToe)
@@ -279,8 +279,6 @@ const App = () => {
     </View>
   );
 };
-
-export default App
 
 const styles = StyleSheet.create({
   // Layout
