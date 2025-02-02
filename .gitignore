@@ -84,6 +84,7 @@ assets/**/ac51*
 # Other folders
 _temp/
 # __tests__
+coverage/
 
 # Other files
 local-README.md
