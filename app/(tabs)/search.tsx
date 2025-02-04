@@ -1,5 +1,5 @@
 // rnfe -> reactNativeFunctionalExportComponent
-import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, Image, ImageBackground, Modal, Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, Image, ImageBackground, Modal, Platform, Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react'; // import React and useState (to manage state) and useRef (creates a reference) React hooks
 import { Picker } from '@react-native-picker/picker';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -365,6 +365,8 @@ const App = () => {
                         style={styles.searchSwitch}
                         value={aiEnabled}
                         onValueChange={setAiEnabled}
+                        // thumbColor={aiEnabled ? 'rgb(0, 0, 0)' : 'rgb(245, 245, 245)'} // can change the switch color for on/off
+                        // trackColor={{ false: '#767577', true: '#34C759' }} // can change the track color for on/off
                         accessibilityLabel="Enable or disable AI search"
                         accessibilityHint="Toggles search using AI-generated results"
                       />
@@ -533,22 +535,26 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   searchModalContainer: {
-    width: '50%',
+    width: Platform.OS === 'web' ? 180 : 150,
     position: 'absolute',
-    top: 50, // position below the button (issue between web and mobile (Android), may be related to modalOverlay's styling/flex)
-    right: 0,
+    top: Platform.OS === 'web' ? 80 : 50, // adjust for Android
+    // right: 0, // not needed with modalOverlay flex-end
     backgroundColor: '#FFF',
-    padding: 10, // issue between web and mobile (Android), web styling is better with 10, Android with specific Left and Right padding instead
+    // paddingHorizontal: Platform.OS === 'web' ? 15 : 10, 
+    paddingVertical: Platform.OS === 'web' ? 10 : 5,
+    padding: Platform.OS === 'web' ? 10 : 0,
+    paddingRight: Platform.OS === 'web' ? 15 : 5,
+    paddingLeft: Platform.OS === 'web' ? 15 : 15,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 5, // Android shadow
+    shadowColor: Platform.OS === 'web' ? '#000' : 'transparent',
+    shadowOffset: Platform.OS === 'web' ? { width: 0, height: 2 } : undefined,
+    shadowOpacity: Platform.OS === 'web' ? 0.8 : undefined,
+    shadowRadius: Platform.OS === 'web' ? 5 : undefined,
+    elevation: Platform.OS === 'android' ? 5 : 0, 
     alignItems: 'center',
   },
   switchContainer: {
@@ -556,13 +562,15 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 0, // issue between web and mobile (Android), web styling is better with 10, Android with 0
+    marginVertical: Platform.OS === 'web' ? 10 : -3,
   },
   searchModalText: {
     fontSize: 16,
-    marginRight: 5,
+    // marginRight: 5,
   },
   searchSwitch: {
+    // transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // enlarges the switch
+
   },
   
   // Dropdown Options

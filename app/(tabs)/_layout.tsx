@@ -10,21 +10,23 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const activeColor = Colors[colorScheme ?? 'light'].tint;
+  const inactiveColor = '#888';
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: activeColor,
+        tabBarInactiveTintColor: inactiveColor,
+        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         // headerTitleAlign: 'center',
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
-          ios: {
-            // use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
+          // use a transparent background on iOS to show the blur effect
+          ios: { position: 'absolute' },
           default: {},
         }),
         tabBarLabelPosition: 'below-icon', // places labels below the icons
@@ -34,7 +36,9 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color,focused }) => (
-            <IconSymbol size={28} name={focused ? 'house.fill' : 'house'} color={color} accessibilityLabel='Home Tab' accessibilityHint='Navigate to the Home screen.' />
+            <IconSymbol size={28} name={focused ? 'house.fill' : 'house'} color={color}
+            // style={{ opacity: focused ? 1 : 0.5 }} // dim effect (excessive with current colors, not needed)
+            accessibilityLabel='Home Tab' accessibilityHint='Navigate to the Home screen.' />
           ),
           tabBarLabel: 'Home',
         }}
