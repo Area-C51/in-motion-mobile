@@ -1,5 +1,4 @@
 // rnfe -> reactNativeFunctionalExportComponent
-
 import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, Image, ImageBackground, Modal, Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react'; // import React and useState (to manage state) and useRef (creates a reference) React hooks
 import { Picker } from '@react-native-picker/picker';
@@ -64,7 +63,11 @@ const App = () => {
   const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
 
   const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
-
+  
+  const toggleSearchModal = () => {
+    setIsMenuVisible(prevState => !prevState);
+  };
+  
   // sliding animation for the search settings menu
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -74,10 +77,6 @@ const App = () => {
     }).start();
   }, [isMenuVisible]);
   
-  const toggleSearchMenu = () => {
-    setIsMenuVisible(prevState => !prevState);
-  };
-
   useEffect(() => { // fetch muscle and category options from backend
     if (!fetchDropdownOptions) return;
     const fetchOptions = async () => {
@@ -299,7 +298,7 @@ const App = () => {
           {/* Search setting button to open search settings menu */}
           <TouchableOpacity
             style={styles.searchSettingsButton}
-            onPress={toggleSearchMenu}
+            onPress={toggleSearchModal}
             accessibilityLabel="Open search settings"
             accessibilityHint="Tap to open the search settings menu"
             accessible={true}
@@ -309,31 +308,36 @@ const App = () => {
             <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
           </TouchableOpacity>
 
-          {/* Search settings menu */}
-          {isMenuVisible && (
-            <Animated.View style={[styles.searchMenuContainer, { transform: [{ translateX: slideAnim }] }]}>
-              <View style={styles.searchMenuOption}>
-                <Text style={styles.searchMenuText}>Dropdowns</Text>
-                <Switch
-                  style={styles.searchSwitch}
-                  value={dropdownsEnabled}
-                  onValueChange={setDropdownsEnabled}
-                  accessibilityLabel="Toggle Dropdowns"
-                  accessibilityHint="Toggles between Dropdown search options on or off"
-                />
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isMenuVisible}
+            onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
+          >
+            {/* The first TouchableWithoutFeedback wraps the entire overlay (modalOverlay) and closes the modal when touched */}
+            <TouchableWithoutFeedback onPress={toggleSearchModal}>
+              <View style={styles.modalOverlay}>
+                {/* This View should NOT close the modal when touched */}
+                {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
+                <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()}>
+                  <Animated.View style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}>
+
+                    {/* Toggle for Dropdown Search */}
+                    <View style={styles.switchContainer}>
+                      <Text style={styles.searchModalText}>Dropdowns</Text>
+                      <Switch style={styles.searchSwitch} value={dropdownsEnabled} onValueChange={setDropdownsEnabled} />
+                    </View>
+
+                    {/* Toggle for AI Search */}
+                    <View style={styles.switchContainer}>
+                      <Text style={styles.searchModalText}>AI Search</Text>
+                      <Switch style={styles.searchSwitch} value={aiEnabled} onValueChange={setAiEnabled} />
+                    </View>
+                  </Animated.View>
+                </TouchableWithoutFeedback>
               </View>
-              <View style={styles.searchMenuOption}>
-                <Text style={styles.searchMenuText}>AI Assist</Text>
-                <Switch
-                  style={styles.searchSwitch}
-                  value={aiEnabled}
-                  onValueChange={setAiEnabled}
-                  accessibilityLabel="Toggle AI Assist"
-                  accessibilityHint="Toggles between basic search and AI assisted search"
-                />
-              </View>
-            </Animated.View>
-          )}
+            </TouchableWithoutFeedback>
+          </Modal>
         </View>
 
         {/* Dropdown container displays dropdowns and submit button if toggled*/}
@@ -484,27 +488,36 @@ const styles = StyleSheet.create({
     zIndex: 4,
   },
 
-  // Search Settings Menu
-  searchMenuContainer: {
+  // Search Settings Modal Menu
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchModalContainer: {
+    width: '50%',
     position: 'absolute',
-    top: 45, // position below the button
+    top: 50, // position below the button (issue between web and mobile (Android), may be related to modalOverlay's styling/flex)
     right: 0,
     backgroundColor: '#FFF',
-    padding: 10,
-    borderRadius: 5,
+    padding: 10, // issue between web and mobile (Android), web styling is better with 10, Android with specific Left and Right padding instead
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 5,
     elevation: 5, // Android shadow
+    alignItems: 'center',
   },
-  searchMenuOption: {
+  switchContainer: {
     flexDirection: 'row',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 5,
+    marginVertical: 0, // issue between web and mobile (Android), web styling is better with 10, Android with 0
   },
-  searchMenuText: {
+  searchModalText: {
     fontSize: 16,
     marginRight: 5,
   },
@@ -519,7 +532,6 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'relative',
     top: 80, // space below the search bar
-  
     borderColor: '#aaa',
     borderWidth: 1,
     paddingRight: 40,
