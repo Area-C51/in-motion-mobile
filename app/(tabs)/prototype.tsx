@@ -59,7 +59,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   const [isMenuVisible, setIsMenuVisible] = useState(false); // search settings menu
-  const [dropdownsEnabled, setDropdownsEnabled] = useState(true); // additional search dropdowns
+  const [dropdownsEnabled, setDropdownsEnabled] = useState(false); // additional search dropdowns
   const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
 
   const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
