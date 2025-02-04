@@ -71,7 +71,7 @@ const App = () => {
   // sliding animation for the search settings menu
   useEffect(() => {
     Animated.timing(slideAnim, {
-      toValue: isMenuVisible ? 0 : 150,  // slide to 0 (visible) or 150 (hidden)
+      toValue: isMenuVisible ? 0 : 150, // slide to 0 (visible) or 150 (hidden)
       duration: 150,
       useNativeDriver: true,
     }).start();
@@ -137,7 +137,7 @@ const App = () => {
       if (!response.ok) throw new Error('Failed to fetch data from the server');
       const data = await response.json();
       setResponseResults(data); // sets responseResults state with the search results
-      setSearchEntry(''); // resets search box to an empty string after each search
+      // setSearchEntry(''); // resets search box to an empty string after each search
     } catch (error) {
       console.error('Error: ', error);
       Alert.alert('Error', 'Something went wrong. Please try again.');
@@ -181,7 +181,7 @@ const App = () => {
       if (!response.ok) throw new Error('Failed to fetch data from the server');
       const data = await response.json();
       setAIResponse(data); // sets responseResults state with AI response data
-      setSearchEntry(''); // resets search box to an empty string after each search
+      // setSearchEntry(''); // resets search box to an empty string after each search
     } catch (error) {
       console.error('Error: ', error);
       Alert.alert('Something went wrong with the AI assisted query. Please try again.');
@@ -245,11 +245,13 @@ const App = () => {
           <View
           accessibilityLabel="Expanded Exercise Details"
           accessibilityHint={`Tap to collapse exercise details for ${item.name}`}>
-            <Text>Force: {item.force}</Text>
+            {/* <Text>Force: {item.force}</Text>
             <Text>Level: {item.level}</Text>
             <Text>Mechanic: {item.mechanic}</Text>
-            <Text>Equipment: {item.equipment}</Text>
-            <Text>Instructions: {item.instructions}</Text>
+            <Text>Equipment: {item.equipment}</Text> */}
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Instructions:</Text> {item.instructions}
+            </Text>
           </View>
         ) : (
           <Text style={styles.expandButtonText}>Tap to Expand</Text>
@@ -326,7 +328,6 @@ const App = () => {
             onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
             accessibilityLabel="Additional earch Settings"
             accessibilityHint="A modal containing additional search settings options"
-            accessibilityRole="dialog"
             accessible={true}
             focusable={true}
           >
@@ -471,7 +472,7 @@ const styles = StyleSheet.create({
     top: 35, // space for the status bar on mobile
     width: '100%',
     justifyContent: 'center',
-    zIndex: 1,
+    zIndex: 3, // highest, higher than dropdownContainer
   },
   searchInput: {
     height: 45,
@@ -479,7 +480,7 @@ const styles = StyleSheet.create({
     fontSize: 16, // search bar is a set height, thus font is set size
     borderColor: '#aaa',
     borderWidth: 1,
-    paddingLeft: 32,
+    paddingLeft: 40, // space for the submit button
     paddingRight: 70, // space for the "X" and search menu buttons
     backgroundColor: '#fff',
     zIndex: 2,
@@ -488,13 +489,9 @@ const styles = StyleSheet.create({
     height: 45,
     width: 40,
     position: 'absolute',
-    // left: 0,
-    // color: '#999',
     borderColor: '#aaa',
     // borderWidth: 1, // only to visualize the button over the search bar
-    // borderTopRightRadius: 25,
-    // borderBottomRightRadius: 25,
-    padding: 5,
+    padding: 8,
     // backgroundColor: '#fff', // only to visualize the button over the search bar
     alignContent: 'center',
     justifyContent: 'center',
@@ -535,16 +532,13 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
-    // justifyContent: 'center',
     alignItems: 'flex-end',
   },
   searchModalContainer: {
     width: Platform.OS === 'web' ? 180 : 150,
     position: 'absolute',
     top: Platform.OS === 'web' ? 80 : 50, // adjust for Android
-    // right: 0, // not needed with modalOverlay flex-end
     backgroundColor: '#FFF',
-    // paddingHorizontal: Platform.OS === 'web' ? 15 : 10, 
     paddingVertical: Platform.OS === 'web' ? 10 : 5,
     padding: Platform.OS === 'web' ? 10 : 0,
     paddingRight: Platform.OS === 'web' ? 15 : 5,
@@ -554,7 +548,7 @@ const styles = StyleSheet.create({
     shadowOffset: Platform.OS === 'web' ? { width: 0, height: 2 } : undefined,
     shadowOpacity: Platform.OS === 'web' ? 0.8 : undefined,
     shadowRadius: Platform.OS === 'web' ? 5 : undefined,
-    elevation: Platform.OS === 'android' ? 5 : 0, 
+    elevation: Platform.OS === 'android' ? 5 : 0,
     alignItems: 'center',
   },
   switchContainer: {
@@ -566,7 +560,6 @@ const styles = StyleSheet.create({
   },
   searchModalText: {
     fontSize: 16,
-    // marginRight: 5,
   },
   searchSwitch: {
     // transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // enlarges the switch
@@ -575,7 +568,6 @@ const styles = StyleSheet.create({
   
   // Dropdown Options
   dropdownContainer: {
-    // flex: 1,
     flexDirection: 'row',
     height: 40,
     width: '100%',
@@ -583,15 +575,15 @@ const styles = StyleSheet.create({
     top: 80, // space below the search bar
     borderColor: '#aaa',
     borderWidth: 1,
-    // paddingRight: 40, // right padding to account for previous search button location
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    // zIndex: 1,
+    zIndex: 2, // 2nd highest, higher than resultsContainer, lower than searchContainer
   },
   dropdown: {
-    height: 50,
+    height: Platform.OS === 'web' ? 40 : 50,
     width: '50%',
+    fontSize: 16,
   },
 
   // Results List
@@ -603,6 +595,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     // overflow: 'scroll', // optional, for enforcing scroll behavior
+    zIndex: 1, // lowest, lower than dropdownContainer
   },
   resultItem: {
     marginBottom: 5,
@@ -610,10 +603,11 @@ const styles = StyleSheet.create({
 
   // Exercise Header
   exerciseName: {
-    fontSize: scaleFontSize(20),  // relative to screen width
+    fontSize: scaleFontSize(18), // relative to screen width
     fontWeight: 'bold',
+    borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
-    padding: 5,
+    padding: 6,
     textAlign: 'center',
   },
   addButton: {
@@ -640,14 +634,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   exerciseImage: {
-    // height: undefined,
     aspectRatio: 1,
+    borderRadius: 10,
   },
   modalBackground: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   fullScreenImage: {
     width: '100%',
@@ -657,7 +651,6 @@ const styles = StyleSheet.create({
   
   // Exercise Expanded
   expandButton: {
-    // marginVertical: 10,
     borderColor: '#888',
     borderWidth: 1,
     borderRadius: 10,
@@ -665,8 +658,9 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   expandButtonText: {
-    fontWeight: 'bold',
-    paddingVertical: 4,
+    fontSize: 14,
+    // fontWeight: 'bold',
+    paddingVertical: 0,
     textAlign: 'center',
   }
 })
