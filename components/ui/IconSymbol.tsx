@@ -22,6 +22,7 @@ const MAPPING = {
   'wand.and.stars': 'auto-fix-normal', // test tab
   'wand.and.rays.inverse': 'auto-fix-high',
   'line.horizontal.3': 'menu-open', // search settings menu
+  'magnifyingglass': 'search', // dropdown submit button
   'xmark': 'remove', // tbd
   'ellipsis': 'menu', // tbd
   'chevron.left.forwardslash.chevron.right': 'code', // none

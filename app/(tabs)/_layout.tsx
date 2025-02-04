@@ -80,13 +80,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="test"
+        name="prototype"
         options={{
-          title: 'Test',
+          title: 'Prototype',
+          headerTitle: 'Prototype Screen',
+          // headerShown: true, // shows header unlike the other screens
           tabBarIcon: ({ color,focused }) => (
-            <IconSymbol size={28} name={focused ? 'wand.and.rays.inverse' : 'wand.and.stars'} color={color} accessibilityLabel='Test Tab' accessibilityHint='Navigate to the Test screen.' />
+            <IconSymbol size={28} name={focused ? 'wand.and.rays.inverse' : 'wand.and.stars'} color={color} accessibilityLabel='Prototype Tab' accessibilityHint='Navigate to the Prototype screen.' />
           ),
-          tabBarLabel: 'Test',
+          tabBarLabel: 'Prototype',
         }}
       />
     </Tabs>

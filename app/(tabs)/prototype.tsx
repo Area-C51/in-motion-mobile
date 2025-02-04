@@ -279,6 +279,17 @@ const App = () => {
             focusable={true}
             onFocus={() => console.log("Search bar focused")}
           />
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={exerciseSearch} // only works with basic search
+            accessibilityLabel="Search for exercises with dropdowns"
+            accessibilityHint="Use the dropdowns for muscles or exercise categories to search"
+            accessible={true}
+            focusable={true}
+            onFocus={() => console.log("Search button focused")}
+          >
+            <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
+          </TouchableOpacity>
   
           {/* Clear button is conditionally displayed if actively searching */}
           {searchEntry ? (
@@ -313,25 +324,50 @@ const App = () => {
             transparent={true}
             visible={isMenuVisible}
             onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
+            accessibilityLabel="Additional earch Settings"
+            accessibilityHint="A modal containing additional search settings options"
+            accessibilityRole="dialog"
+            accessible={true}
+            focusable={true}
           >
             {/* The first TouchableWithoutFeedback wraps the entire overlay (modalOverlay) and closes the modal when touched */}
-            <TouchableWithoutFeedback onPress={toggleSearchModal}>
+            <TouchableWithoutFeedback onPress={toggleSearchModal} accessibilityLabel="Close search settings">
               <View style={styles.modalOverlay}>
-                {/* This View should NOT close the modal when touched */}
                 {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
-                <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()}>
-                  <Animated.View style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}>
+                <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()} accessible={false}>
+                  <Animated.View
+                    style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}
+                    accessibilityLabel="Search Settings Options"
+                    accessible={true}
+                    focusable={true}
+                  >
 
                     {/* Toggle for Dropdown Search */}
                     <View style={styles.switchContainer}>
-                      <Text style={styles.searchModalText}>Dropdowns</Text>
-                      <Switch style={styles.searchSwitch} value={dropdownsEnabled} onValueChange={setDropdownsEnabled} />
+                      <Text style={styles.searchModalText} accessibilityLabel="Dropdown search toggle label">
+                        Dropdowns
+                      </Text>
+                      <Switch
+                        style={styles.searchSwitch}
+                        value={dropdownsEnabled}
+                        onValueChange={setDropdownsEnabled}
+                        accessibilityLabel="Enable or disable dropdown search"
+                        accessibilityHint="Toggles search using dropdown filters"
+                      />
                     </View>
 
                     {/* Toggle for AI Search */}
                     <View style={styles.switchContainer}>
-                      <Text style={styles.searchModalText}>AI Search</Text>
-                      <Switch style={styles.searchSwitch} value={aiEnabled} onValueChange={setAiEnabled} />
+                      <Text style={styles.searchModalText} accessibilityLabel="AI search toggle label">
+                        AI Search
+                      </Text>
+                      <Switch
+                        style={styles.searchSwitch}
+                        value={aiEnabled}
+                        onValueChange={setAiEnabled}
+                        accessibilityLabel="Enable or disable AI search"
+                        accessibilityHint="Toggles search using AI-generated results"
+                      />
                     </View>
                   </Animated.View>
                 </TouchableWithoutFeedback>
@@ -365,17 +401,6 @@ const App = () => {
                 <Picker.Item key={index} label={c} value={c} />
               ))}
             </Picker>
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={exerciseSearch} // only works with basic search
-              accessibilityLabel="Search for exercises with dropdowns"
-              accessibilityHint="Use the dropdowns for muscles or exercise categories to search"
-              accessible={true}
-              focusable={true}
-              onFocus={() => console.log("Search button focused")}
-            >
-              <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
-            </TouchableOpacity>
           </View>
           ) : null
         }
@@ -452,10 +477,26 @@ const styles = StyleSheet.create({
     fontSize: 16, // search bar is a set height, thus font is set size
     borderColor: '#aaa',
     borderWidth: 1,
-    paddingLeft: 10,
+    paddingLeft: 32,
     paddingRight: 70, // space for the "X" and search menu buttons
     backgroundColor: '#fff',
     zIndex: 2,
+  },
+  submitButton: {
+    height: 45,
+    width: 40,
+    position: 'absolute',
+    // left: 0,
+    // color: '#999',
+    borderColor: '#aaa',
+    // borderWidth: 1, // only to visualize the button over the search bar
+    // borderTopRightRadius: 25,
+    // borderBottomRightRadius: 25,
+    padding: 5,
+    // backgroundColor: '#fff', // only to visualize the button over the search bar
+    alignContent: 'center',
+    justifyContent: 'center',
+    zIndex: 4,
   },
   clearButton: {
     height: 45,
@@ -473,16 +514,16 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   searchSettingsButton: {
-    width: 40,
     height: 45,
+    width: 40,
     position: 'absolute',
-    right: 0,
+    right: -5,
     borderColor: '#aaa',
     borderWidth: 1,
     borderTopLeftRadius: 25,
     borderBottomLeftRadius: 25,
-    padding: 10,
-    backgroundColor: '#fff',
+    padding: 5,
+    // backgroundColor: '#fff', // only to visualize the button over the search bar
     alignContent: 'center',
     justifyContent: 'center',
     zIndex: 4,
@@ -534,7 +575,7 @@ const styles = StyleSheet.create({
     top: 80, // space below the search bar
     borderColor: '#aaa',
     borderWidth: 1,
-    paddingRight: 40,
+    // paddingRight: 40, // right padding to account for previous search button location
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
@@ -543,17 +584,6 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 50,
     width: '50%',
-  },
-  submitButton: {
-    height: 40,
-    width: 40,
-    position: 'absolute',
-    right: 0,
-    borderColor: '#aaa',
-    borderWidth: 1,
-    borderRadius: 15,
-    backgroundColor: '#fff',
-    padding: 5,
   },
 
   // Results List
