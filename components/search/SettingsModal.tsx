@@ -1,0 +1,1 @@
+// Overall, I will ask about modularizing ExerciseItem.tsx, SearchBar.tsx, and SettingsModal.tsx, but let's start with how to modularize ExerciseItem.tsx please.

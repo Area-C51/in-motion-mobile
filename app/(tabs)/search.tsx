@@ -1,23 +1,14 @@
 // rnfe -> reactNativeFunctionalExportComponent
-import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, Image, ImageBackground, Modal, Platform, Pressable, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react'; // import React and useState (to manage state) and useRef (creates a reference) React hooks
+import React, { useState, useRef, useEffect } from 'react';
+import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, ImageBackground, Modal, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
+import ExerciseItem, { Exercise } from '@/components/search/ExerciseItem';
+import ImageModal from '@/components/search/ImageModal';
 
-interface Exercise { // define a type for the exercise object
-  id: string;
-  name: string;
-  images: string[];
-  force: string;
-  level: string;
-  mechanic: string;
-  equipment: string;
-  instructions: string;
-}
-
-interface QueryParams { // define a type for the query parameters
+// interface to define types for the query parameters
+interface QueryParams {
   id?: string;
   muscle?: string;
   category?: string;
@@ -45,7 +36,7 @@ const App = () => {
   
   const [muscleOptions, setMuscleOptions] = useState([]); // state for muscle options
   const [categoryOptions, setCategoryOptions] = useState([]); // state for category options
-  const [fetchDropdownOptions, setfetchDropdownOptions] = useState(true); // status flag to ensure dropdown options data only occurs once
+  const [fetchDropdownOptions, setFetchDropdownOptions] = useState(true); // status flag to ensure dropdown options data only occurs once
 
   const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text
   const [muscle, setMuscle] = useState('');
@@ -77,27 +68,24 @@ const App = () => {
     }).start();
   }, [isMenuVisible]);
   
-  useEffect(() => { // fetch muscle and category options from backend
+  // fetch muscle and category options from backend
+  useEffect(() => {
     if (!fetchDropdownOptions) return;
     const fetchOptions = async () => {
       try {
         const response = await fetch('http://localhost:8080/api/dropdown-options');
         if (!response.ok) throw new Error('Failed to fetch options');
-        const data = await response.json();
+        const { muscles, categories } = await response.json();
         
-        const sortedMuscles = data.muscles.sort((a: string, b: string) => a.localeCompare(b)); // sort muscle options
-        const sortedCategories = data.categories.sort((a: string, b: string) => a.localeCompare(b)); // sort category options
-
-        setMuscleOptions(sortedMuscles); // set muscle options/state after sorting
-        setCategoryOptions(sortedCategories); // set category options/state after sorting
-        setfetchDropdownOptions(false); // set status flag to false after fetching data once
+        setMuscleOptions(muscles.sort((a: string, b: string) => a.localeCompare(b))); // sort and set retrieved muscle options
+        setCategoryOptions(categories.sort((a: string, b: string) => a.localeCompare(b))); // sort and set retrieved category options
+        setFetchDropdownOptions(false); // set status flag to false after fetching data once
       } catch (error) {
         console.error('Error fetching options:', error);
-        setfetchDropdownOptions(false); // set status flag to false even if an error occurs
+        setFetchDropdownOptions(false); // set status flag to false even if an error occurs
       }
     };
     fetchOptions();
-
     // ********** ********** ********** ********** ********** ********** ********** ********** ********** **********
     // USED FOR DEBUGGING MULTIPLE MOUNTS OCCURING WITH useEffect FOR setMuscleOptions AND setCategoryOptions
     // ********** ********** ********** ********** ********** ********** ********** ********** ********** **********
@@ -105,24 +93,23 @@ const App = () => {
     // return () => {
     //   console.log('Component unmounted');
     // };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // empty dependency array means this effect runs once when the component mounts
+  }, []);
 
   // helper function to retrieve input values
-  const getSearchInputs = () => { // input retrieval helper function
+  const getSearchInputs = () => {
     return {
       searchTerm: searchEntry.trim() || '', // get the search term
     };
   };
   
-  const exerciseSearch = async () => { // non-AI assisted exercise search functionality
+  const exerciseSearch = async () => { // basic exercise search functionality
     const { searchTerm } = getSearchInputs();
     const queryParams: QueryParams = {};
     
-    // only add the parameters that are non-empty
-    if (searchTerm) queryParams.id = searchTerm; // include the search term if provided
-    if (muscle) queryParams.muscle = muscle; // include muscle if selected
-    if (category) queryParams.category = category; // include category if selected
+    // only add the parameters that exist
+    if (searchTerm) queryParams.id = searchTerm;
+    if (muscle) queryParams.muscle = muscle;
+    if (category) queryParams.category = category;
 
     if (Object.keys(queryParams).length === 0) { // if no filter or search term is provided, show an alert and stop the search
       Alert.alert('Please enter a search term or select a filter');
@@ -145,7 +132,6 @@ const App = () => {
   };
 
   const aiExerciseSearch = async () => { // AI-assisted exercise search functionality
-    // eslint-disable-next-line no-unused-vars
     const { searchTerm } = getSearchInputs();
 
     const queryParams: QueryParams = {}; // initial queryParams object
@@ -192,72 +178,12 @@ const App = () => {
 
   // each exercise item of the results container
   const renderExerciseItem = ({ item }: { item: Exercise }) => (
-    <View key={item.id} style={styles.resultItem}>
-      <Text style={styles.exerciseName}>{item.name}</Text>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {/* Opens menu to add to workout */}} // WIP
-        accessibilityLabel="Add exercie to workouts"
-        accessibilityHint="Tap to add this exercise to your workouts"
-        accessible={true} // ensures focusable by the screen reader
-        focusable={true} // ensures focusable with keyboard navigation or screen reader
-        onFocus={() => console.log("Button focused")}
-      >
-        <Text style={styles.addText}>+</Text>
-      </TouchableOpacity>
-      <View style={styles.imageContainer}>
-      {Array.isArray(item.images) ? (
-        item.images.map((imageUrl, index) => (
-          <Pressable
-            key={index}
-            style={[
-              styles.pressableImage,
-              { marginRight: index === item.images.length - 1 ? 0 : 5 }, // dynamically set marginRight (creates center space without adding right margin to 2nd of paired images)
-            ]}
-            onPress={() => setSelectedImage(imageUrl)}
-            accessibilityLabel="Expand Image"
-            accessibilityHint={`Tap to expand this image for ${item.name}`}
-            accessible={true}
-            focusable={true}
-            onFocus={() => console.log("Button focused")}
-          >
-            <Image
-              source={{ uri: imageUrl }}
-              style={styles.exerciseImage}
-              accessibilityLabel={`Exercise image for ${item.name}`}
-            />
-          </Pressable>
-        ))
-      ) : (
-        <Text>No images available</Text> // fallback if `exercise.images` isn't an array
-      )}
-      </View>
-      <Pressable
-        onPress={() => setExpandedExerciseId(expandedExerciseId === item.id ? null : item.id)}
-        style={styles.expandButton}
-        accessibilityLabel="Expand Exercise Details"
-        accessibilityHint={`Tap to expand exercise details for ${item.name}`}
-        accessible={true}
-        focusable={true}
-        onFocus={() => console.log("Button focused")}
-      >
-        {expandedExerciseId === item.id ? (
-          <View
-          accessibilityLabel="Expanded Exercise Details"
-          accessibilityHint={`Tap to collapse exercise details for ${item.name}`}>
-            {/* <Text>Force: {item.force}</Text>
-            <Text>Level: {item.level}</Text>
-            <Text>Mechanic: {item.mechanic}</Text>
-            <Text>Equipment: {item.equipment}</Text> */}
-            <Text>
-              <Text style={{ fontWeight: 'bold' }}>Instructions:</Text> {item.instructions}
-            </Text>
-          </View>
-        ) : (
-          <Text style={styles.expandButtonText}>Tap to Expand</Text>
-        )}
-      </Pressable>
-    </View>
+    <ExerciseItem
+      exercise={item}
+      expandedExerciseId={expandedExerciseId}
+      setExpandedExerciseId={setExpandedExerciseId}
+      setSelectedImage={setSelectedImage}
+    />
   );
   
   return (
@@ -418,32 +344,17 @@ const App = () => {
               keyExtractor={(item) => item.id}
             />
           ) : (
-            <Text style={[styles.exerciseName, {top: 50}]}>Please search for an exercise</Text>
+            <Text style={[styles.exerciseListPlaceholder, {top: 50}]}>Please search for an exercise</Text>
           )}
         </View>
       </ImageBackground>
 
       {/* Modal to display the clicked image */}
-      <Modal
-        visible={!!selectedImage}
-        transparent={true}
-        onRequestClose={() => setSelectedImage(null)}
-        animationType="fade"
-        accessibilityLabel="Image full screen view"
-      >
-        <Pressable
-          style={styles.modalBackground}
-          onPress={() => setSelectedImage(null)}
-          accessibilityLabel="Close the image modal"
-          accessible={true}
-          focusable={true}
-          onFocus={() => console.log("Button focused")}
-        >
-          {selectedImage && (
-            <Image source={{ uri: selectedImage }} style={styles.fullScreenImage} />
-          )}
-        </Pressable>
-      </Modal>
+      <ImageModal
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+        fadeDuration={100} // Customize the fade duration to 500ms (or any value you prefer)
+      />
     </View>
   );
 };
@@ -489,7 +400,7 @@ const styles = StyleSheet.create({
     height: 45,
     width: 40,
     position: 'absolute',
-    borderColor: '#aaa',
+    // borderColor: '#aaa',
     // borderWidth: 1, // only to visualize the button over the search bar
     padding: 8,
     // backgroundColor: '#fff', // only to visualize the button over the search bar
@@ -531,13 +442,13 @@ const styles = StyleSheet.create({
   // Search Settings Modal Menu
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'flex-end',
   },
   searchModalContainer: {
     width: Platform.OS === 'web' ? 180 : 150,
     position: 'absolute',
-    top: Platform.OS === 'web' ? 80 : 50, // adjust for Android
+    top: Platform.OS === 'web' ? 80 : 50,
     backgroundColor: '#FFF',
     paddingVertical: Platform.OS === 'web' ? 10 : 5,
     padding: Platform.OS === 'web' ? 10 : 0,
@@ -563,7 +474,6 @@ const styles = StyleSheet.create({
   },
   searchSwitch: {
     // transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // enlarges the switch
-
   },
   
   // Dropdown Options
@@ -597,70 +507,12 @@ const styles = StyleSheet.create({
     // overflow: 'scroll', // optional, for enforcing scroll behavior
     zIndex: 1, // lowest, lower than dropdownContainer
   },
-  resultItem: {
-    marginBottom: 5,
-  },
-
-  // Exercise Header
-  exerciseName: {
+  exerciseListPlaceholder: {
     fontSize: scaleFontSize(18), // relative to screen width
     fontWeight: 'bold',
-    borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
     padding: 6,
     textAlign: 'center',
-  },
-  addButton: {
-    width: 40,
-    position: 'absolute',
-    right: -10,
-  },
-  addText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'rgba(0, 0, 0, 0.7)',
-  },
-
-  // Exercise Images
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap',
-    marginVertical: 5,
-  },
-  pressableImage: {
-    flex: 1,
-    width: '100%',
-  },
-  exerciseImage: {
-    aspectRatio: 1,
     borderRadius: 10,
   },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  },
-  fullScreenImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-  },
-  
-  // Exercise Expanded
-  expandButton: {
-    borderColor: '#888',
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.90)',
-    padding: 8,
-  },
-  expandButtonText: {
-    fontSize: 14,
-    // fontWeight: 'bold',
-    paddingVertical: 0,
-    textAlign: 'center',
-  }
 })
