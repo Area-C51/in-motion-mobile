@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   exerciseName: {
     flex: 1,
     fontSize: scaleFontSize(18), // relative to screen width
-    fontWeight: 'bold',
+    fontWeight: '700',
     padding: 6,
     textAlign: 'left',
   },
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   boldText: {
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 });
 

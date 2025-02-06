@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   clearText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#999',
   },
   searchSettingsButton: {

@@ -255,12 +255,11 @@ const styles = StyleSheet.create({
     top: 80, // space for search bar
     paddingLeft: 10,
     paddingRight: 10,
-    // overflow: 'scroll', // optional, for enforcing scroll behavior
     zIndex: 1, // lowest, lower than dropdownContainer
   },
   exerciseListPlaceholder: {
     fontSize: scaleFontSize(18), // relative to screen width
-    fontWeight: 'bold',
+    fontWeight: '700',
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
     padding: 6,
     textAlign: 'center',
