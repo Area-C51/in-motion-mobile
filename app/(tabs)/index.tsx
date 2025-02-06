@@ -2,7 +2,7 @@
 import React from 'react';
 import { Dimensions, ImageBackground, Pressable, ScrollView , StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router';
-import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
+import ThemedText from '@/components/ThemedText';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,34 +12,28 @@ const mockRow2 = [['Title2.1', `Row of 10 side scrolling random or even suggeste
 const App = () => {
   return (
     <View style={styles.mainContainer}>
-      <ImageBackground
-        // source={immBackground} // no image
-        resizeMode='cover'
-        style={styles.backgroundImage}
-      >
-        <View style={styles.displayContainer}>
-          <Text style={styles.header}>Recent Workouts</Text>
-          <ScrollView horizontal style={styles.displayRow}>
-              {mockRow1.map((el, index) =>
-                <View key={`row1-${index}`} style={styles.displayCard}>
-                  <Text style={styles.ideas}>{el[1]}</Text>
-                  <Text style={styles.title}>{el[0]}</Text>
-                </View>
-              )}
-          </ScrollView>
-        </View>
-        <View style={styles.displayContainer}>
-          <Text style={styles.header}>Fresh Finds</Text>
-          <ScrollView horizontal style={styles.displayRow}>
-            {mockRow2.map((el, index) =>
-              <View key={`row2-${index}`} style={styles.displayCard}>
+      <View style={styles.displayContainer}>
+        <Text style={styles.header}>Recent Workouts</Text>
+        <ScrollView horizontal style={styles.displayRow}>
+            {mockRow1.map((el, index) =>
+              <View key={`row1-${index}`} style={styles.displayCard}>
                 <Text style={styles.ideas}>{el[1]}</Text>
                 <Text style={styles.title}>{el[0]}</Text>
               </View>
             )}
-          </ScrollView>
-        </View>
-      </ImageBackground>
+        </ScrollView>
+      </View>
+      <View style={styles.displayContainer}>
+        <Text style={styles.header}>Fresh Finds</Text>
+        <ScrollView horizontal style={styles.displayRow}>
+          {mockRow2.map((el, index) =>
+            <View key={`row2-${index}`} style={styles.displayCard}>
+              <Text style={styles.ideas}>{el[1]}</Text>
+              <Text style={styles.title}>{el[0]}</Text>
+            </View>
+          )}
+        </ScrollView>
+      </View>
     </View>
   )
 }
@@ -49,15 +43,7 @@ export default App
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    flexDirection: 'column',
-    // backgroundColor: 'white',
-  },
-  backgroundImage: {
-    height: Math.min(width, height),
-    width: Math.min(width, height),
-    resizeMode: 'cover',
     justifyContent: 'center',
-    transform: [{ translateY: width * 0.5 }],
   },
   displayContainer: {
     // borderWidth: 1,

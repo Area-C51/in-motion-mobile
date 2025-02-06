@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
-import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
+import ThemedText from '@/components/ThemedText';
+import ThemedView from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
 import SettingsModal from '@/components/search/SettingsModal';
 import ExerciseItem, { Exercise } from '@/components/search/ExerciseItem';
@@ -20,7 +21,7 @@ const { width, height } = Dimensions.get('window');
 //   height: height * 0.8, // 80% of the screen height
 //   width: width * 0.9, // 90% of the screen width
 // },
-
+const minScreenDimension = Math.min(width, height); 
 // allows scaling font size relative to screen width
 const scaleFontSize = (size: number) => {
   const { width } = Dimensions.get('window');
@@ -175,11 +176,8 @@ export default function Search() {
   
   return (
     <View style={styles.mainContainer}>
-      <ImageBackground
-        source={immBackground} // image as a placeholder until search results returned, default to light or dark theme after
-        resizeMode='cover'
-        style={styles.backgroundImage}
-      >
+      <ThemedView showDefaultBackgroundImage={!responseResults.length} style={styles.backgroundContainer} />
+      <View style={styles.contentContainer}>
         <SearchBar
           searchEntry={searchEntry}
           setSearchEntry={setSearchEntry}
@@ -218,7 +216,7 @@ export default function Search() {
             <Text style={[styles.exerciseListPlaceholder, {top: 50}]}>Please search for an exercise</Text>
           )}
         </View>
-      </ImageBackground>
+      </View>
 
       {/* Modal to display the clicked image */}
       <ImageModal
@@ -233,16 +231,17 @@ export default function Search() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    flexDirection: 'column',
+    // flexDirection: 'column',
   },
-  backgroundImage: {
+  backgroundContainer: {
+    position: 'absolute',
+    height: minScreenDimension,
+    width: minScreenDimension,
+    top: (height - minScreenDimension) / 2,
+    left: (width - minScreenDimension) / 2,
+  },
+  contentContainer: {
     flex: 1,
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'white',
-    resizeMode: 'cover',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   // Results List
@@ -253,7 +252,7 @@ const styles = StyleSheet.create({
     top: 80, // space for search bar
     paddingLeft: 10,
     paddingRight: 10,
-    zIndex: 1, // lowest, lower than dropdownContainer
+    // zIndex: 1, // lowest, lower than dropdownContainer
   },
   exerciseListPlaceholder: {
     fontSize: scaleFontSize(18), // relative to screen width
