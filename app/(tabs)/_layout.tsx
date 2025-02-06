@@ -54,6 +54,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="workouts"
+        options={{
+          title: 'Workouts',
+          tabBarIcon: ({ color,focused }) => (
+            <IconSymbol size={28} name={focused ? 'square.stack.3d.down.right.fill' : 'square.stack.3d.down.right'} color={color} accessibilityLabel='Workouts Tab' accessibilityHint='Navigate to the Workouts screen.' />
+          ),
+          tabBarLabel: 'Workouts',
+        }}
+      />
+      {/* <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
@@ -82,7 +92,7 @@ export default function TabLayout() {
           ),
           tabBarLabel: 'Contact',
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="prototype"
         options={{

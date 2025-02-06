@@ -30,7 +30,7 @@ const scaleFontSize = (size: number) => {
 //   fontSize: scaleFontSize(16), // Scale text size based on screen width
 // },
 
-const App = () => {
+export default function Search() {
   const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allows dynamic colors, possible use with themes
   
   const [muscleOptions, setMuscleOptions] = useState([]); // state for muscle options
@@ -176,7 +176,7 @@ const App = () => {
   return (
     <View style={styles.mainContainer}>
       <ImageBackground
-        source={immBackground}
+        source={immBackground} // image as a placeholder until search results returned, default to light or dark theme after
         resizeMode='cover'
         style={styles.backgroundImage}
       >
@@ -229,8 +229,6 @@ const App = () => {
     </View>
   );
 };
-
-export default App
 
 const styles = StyleSheet.create({
   mainContainer: {

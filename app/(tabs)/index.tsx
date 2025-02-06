@@ -13,7 +13,7 @@ const App = () => {
   return (
     <View style={styles.mainContainer}>
       <ImageBackground
-        source={immBackground}
+        // source={immBackground} // no image
         resizeMode='cover'
         style={styles.backgroundImage}
       >

@@ -13,6 +13,8 @@ const MAPPING = {
   'house.fill': 'house',
   'magnifyingglass.circle': 'search', // search tab
   'magnifyingglass.circle.fill': 'saved-search',
+  'square.stack.3d.down.right' : 'auto-awesome-motion',
+  'square.stack.3d.down.right.fill' : 'auto-awesome-motion',
   'paperplane': 'keyboard-double-arrow-right', // explore tab
   'paperplane.fill': 'double-arrow',
   'book': 'local-library', // how to tab
