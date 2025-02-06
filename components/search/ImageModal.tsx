@@ -1,12 +1,5 @@
-// /components/search/ImageModal.tsx
 import React, { useEffect, useRef } from 'react';
-import {
-  Modal,
-  Pressable,
-  Image,
-  Animated,
-  StyleSheet,
-} from 'react-native';
+import { Animated, Image, Modal, Pressable, StyleSheet } from 'react-native';
 
 interface ImageModalProps {
   selectedImage: string | null;
@@ -76,13 +69,13 @@ const styles = StyleSheet.create({
   },
   modalBackground: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   fullScreenImage: {
-    width: '100%',
     height: '100%',
+    width: '100%',
     resizeMode: 'contain',
   },
 });

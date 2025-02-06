@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
   // Exercise Header
   headerRow: {
     flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
     alignItems: 'center',
     justifyContent: 'space-between',
     // marginBottom: 5,
-    borderWidth: 1,
-    borderRadius: 10,
   },
   exerciseName: {
     flex: 1,
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
   // Exercise Images
   imageContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     flexWrap: 'wrap',
+    justifyContent: 'flex-start',
     marginVertical: 5,
   },
   pressableImage: {
@@ -180,11 +180,11 @@ const styles = StyleSheet.create({
   
   // Exercise Expanded
   expandedDetails: {
-    backgroundColor: 'rgba(255, 255, 255, 0.90)',
     borderWidth: 1,
     borderColor: '#888',
     borderRadius: 10,
     padding: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.90)',
     // marginTop: 5,
   },
   expandedText: {

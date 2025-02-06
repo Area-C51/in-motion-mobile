@@ -1,9 +1,9 @@
 // rnfe -> reactNativeFunctionalExportComponent
-import React, { useState, useRef, useEffect } from 'react';
-import { ActivityIndicator, Alert, Animated, Dimensions, FlatList, ImageBackground, Modal, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Dimensions, FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
+import SearchBar from '@/components/search/SearchBar';
+import SettingsModal from '@/components/search/SettingsModal';
 import ExerciseItem, { Exercise } from '@/components/search/ExerciseItem';
 import ImageModal from '@/components/search/ImageModal';
 
@@ -53,20 +53,9 @@ const App = () => {
   const [dropdownsEnabled, setDropdownsEnabled] = useState(false); // additional search dropdowns
   const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
 
-  const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
-  
   const toggleSearchModal = () => {
     setIsMenuVisible(prevState => !prevState);
   };
-  
-  // sliding animation for the search settings menu
-  useEffect(() => {
-    Animated.timing(slideAnim, {
-      toValue: isMenuVisible ? 0 : 150, // slide to 0 (visible) or 150 (hidden)
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
-  }, [isMenuVisible]);
   
   // fetch muscle and category options from backend
   useEffect(() => {
@@ -194,146 +183,30 @@ const App = () => {
         resizeMode='cover'
         style={styles.backgroundImage}
       >
-        {/* Search container, runs basic or AI assisted search if toggled on */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search exercises by name"
-            value={searchEntry} // bind the TextInput to state
-            onChangeText={setSearchEntry} // update the searchEntry state as the user types
-            onSubmitEditing={aiEnabled ? aiExerciseSearch : exerciseSearch} // trigger search when "Enter" is pressed
-            accessibilityLabel="Search for exercises"
-            accessibilityHint="Enter the name of an exercise to search"
-            accessible={true}
-            focusable={true}
-            onFocus={() => console.log("Search bar focused")}
-          />
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={exerciseSearch} // only works with basic search
-            accessibilityLabel="Search for exercises with dropdowns"
-            accessibilityHint="Use the dropdowns for muscles or exercise categories to search"
-            accessible={true}
-            focusable={true}
-            onFocus={() => console.log("Search button focused")}
-          >
-            <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
-          </TouchableOpacity>
-  
-          {/* Clear button is conditionally displayed if actively searching */}
-          {searchEntry ? (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => setSearchEntry('')}
-              accessibilityLabel="Clear Search Bar"
-              accessibilityHint="Tap to clear the search bar"  
-              accessible={true}
-              focusable={true}
-              onFocus={() => console.log("Button focused")}      
-            >
-              <Text style={styles.clearText}>X</Text>
-            </TouchableOpacity>
-          ) : null}
-
-          {/* Search setting button to open search settings menu */}
-          <TouchableOpacity
-            style={styles.searchSettingsButton}
-            onPress={toggleSearchModal}
-            accessibilityLabel="Open search settings"
-            accessibilityHint="Tap to open the search settings menu"
-            accessible={true}
-            focusable={true}
-            onFocus={() => console.log("Button focused")}
-          >
-            <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
-          </TouchableOpacity>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={isMenuVisible}
-            onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
-            accessibilityLabel="Additional earch Settings"
-            accessibilityHint="A modal containing additional search settings options"
-            accessible={true}
-            focusable={true}
-          >
-            {/* The first TouchableWithoutFeedback wraps the entire overlay (modalOverlay) and closes the modal when touched */}
-            <TouchableWithoutFeedback onPress={toggleSearchModal} accessibilityLabel="Close search settings">
-              <View style={styles.modalOverlay}>
-                {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
-                <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()} accessible={false}>
-                  <Animated.View
-                    style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}
-                    accessibilityLabel="Search Settings Options"
-                    accessible={true}
-                    focusable={true}
-                  >
-
-                    {/* Toggle for Dropdown Search */}
-                    <View style={styles.switchContainer}>
-                      <Text style={styles.searchModalText} accessibilityLabel="Dropdown search toggle label">
-                        Dropdowns
-                      </Text>
-                      <Switch
-                        style={styles.searchSwitch}
-                        value={dropdownsEnabled}
-                        onValueChange={setDropdownsEnabled}
-                        accessibilityLabel="Enable or disable dropdown search"
-                        accessibilityHint="Toggles search using dropdown filters"
-                      />
-                    </View>
-
-                    {/* Toggle for AI Search */}
-                    <View style={styles.switchContainer}>
-                      <Text style={styles.searchModalText} accessibilityLabel="AI search toggle label">
-                        AI Search
-                      </Text>
-                      <Switch
-                        style={styles.searchSwitch}
-                        value={aiEnabled}
-                        onValueChange={setAiEnabled}
-                        // thumbColor={aiEnabled ? 'rgb(0, 0, 0)' : 'rgb(245, 245, 245)'} // can change the switch color for on/off
-                        // trackColor={{ false: '#767577', true: '#34C759' }} // can change the track color for on/off
-                        accessibilityLabel="Enable or disable AI search"
-                        accessibilityHint="Toggles search using AI-generated results"
-                      />
-                    </View>
-                  </Animated.View>
-                </TouchableWithoutFeedback>
-              </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-        </View>
-
-        {/* Dropdown container displays dropdowns and submit button if toggled*/}
-        {dropdownsEnabled ? (
-          <View style={styles.dropdownContainer}>
-            <Picker
-            selectedValue={muscle}
-            onValueChange={(itemValue) => setMuscle(itemValue)}
-            style={styles.dropdown}
-            >
-              <Picker.Item label="Select Muscle" value="" />
-              {muscleOptions.map((m, index) => (
-                <Picker.Item key={index} label={m} value={m} />
-              ))}
-            </Picker>
-
-            {/* Category Picker */}
-            <Picker
-              selectedValue={category}
-              onValueChange={(itemValue) => setCategory(itemValue)}
-              style={styles.dropdown}
-            >
-              <Picker.Item label="Select Category" value="" />
-              {categoryOptions.map((c, index) => (
-                <Picker.Item key={index} label={c} value={c} />
-              ))}
-            </Picker>
-          </View>
-          ) : null
-        }
+        <SearchBar
+          searchEntry={searchEntry}
+          setSearchEntry={setSearchEntry}
+          aiEnabled={aiEnabled}
+          aiExerciseSearch={aiExerciseSearch}
+          exerciseSearch={exerciseSearch}
+          toggleSearchModal={toggleSearchModal}
+          iconColor={iconColor}
+          dropdownsEnabled={dropdownsEnabled}
+          muscle={muscle}
+          setMuscle={setMuscle}
+          category={category}
+          setCategory={setCategory}
+          muscleOptions={muscleOptions}
+          categoryOptions={categoryOptions}
+        />
+        <SettingsModal
+          isMenuVisible={isMenuVisible}
+          toggleSearchModal={toggleSearchModal}
+          dropdownsEnabled={dropdownsEnabled}
+          setDropdownsEnabled={setDropdownsEnabled}
+          aiEnabled={aiEnabled}
+          setAiEnabled={setAiEnabled}
+        />
 
         {/* Results container displays exercice items if present */}
         <View style={styles.resultsContainer}>
@@ -363,138 +236,18 @@ const App = () => {
 export default App
 
 const styles = StyleSheet.create({
-  // Layout
   mainContainer: {
     flex: 1,
     flexDirection: 'column',
   },
   backgroundImage: {
     flex: 1,
-    width: '100%',
     height: '100%',
+    width: '100%',
     backgroundColor: 'white',
     resizeMode: 'cover',
-    justifyContent: 'center',
     alignItems: 'center',
-  },
-
-  // Search Bar
-  searchContainer: {
-    position: 'absolute',
-    top: 35, // space for the status bar on mobile
-    width: '100%',
     justifyContent: 'center',
-    zIndex: 3, // highest, higher than dropdownContainer
-  },
-  searchInput: {
-    height: 45,
-    width: '100%',
-    fontSize: 16, // search bar is a set height, thus font is set size
-    borderColor: '#aaa',
-    borderWidth: 1,
-    paddingLeft: 40, // space for the submit button
-    paddingRight: 70, // space for the "X" and search menu buttons
-    backgroundColor: '#fff',
-    zIndex: 2,
-  },
-  submitButton: {
-    height: 45,
-    width: 40,
-    position: 'absolute',
-    // borderColor: '#aaa',
-    // borderWidth: 1, // only to visualize the button over the search bar
-    padding: 8,
-    // backgroundColor: '#fff', // only to visualize the button over the search bar
-    alignContent: 'center',
-    justifyContent: 'center',
-    zIndex: 4,
-  },
-  clearButton: {
-    height: 45,
-    width: 50,
-    // borderWidth: 1, // only to visualize the button over the search bar
-    position: 'absolute',
-    right: 20,
-    paddingLeft: 10,
-    justifyContent: 'center',
-    zIndex: 3,
-  },
-  clearText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#999',
-  },
-  searchSettingsButton: {
-    height: 45,
-    width: 40,
-    position: 'absolute',
-    right: -5,
-    borderColor: '#aaa',
-    borderWidth: 1,
-    borderTopLeftRadius: 25,
-    borderBottomLeftRadius: 25,
-    padding: 5,
-    // backgroundColor: '#fff', // only to visualize the button over the search bar
-    alignContent: 'center',
-    justifyContent: 'center',
-    zIndex: 4,
-  },
-
-  // Search Settings Modal Menu
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    alignItems: 'flex-end',
-  },
-  searchModalContainer: {
-    width: Platform.OS === 'web' ? 180 : 150,
-    position: 'absolute',
-    top: Platform.OS === 'web' ? 80 : 50,
-    backgroundColor: '#FFF',
-    paddingVertical: Platform.OS === 'web' ? 10 : 5,
-    padding: Platform.OS === 'web' ? 10 : 0,
-    paddingRight: Platform.OS === 'web' ? 15 : 5,
-    paddingLeft: Platform.OS === 'web' ? 15 : 15,
-    borderRadius: 10,
-    shadowColor: Platform.OS === 'web' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'web' ? { width: 0, height: 2 } : undefined,
-    shadowOpacity: Platform.OS === 'web' ? 0.8 : undefined,
-    shadowRadius: Platform.OS === 'web' ? 5 : undefined,
-    elevation: Platform.OS === 'android' ? 5 : 0,
-    alignItems: 'center',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: Platform.OS === 'web' ? 10 : -3,
-  },
-  searchModalText: {
-    fontSize: 16,
-  },
-  searchSwitch: {
-    // transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // enlarges the switch
-  },
-  
-  // Dropdown Options
-  dropdownContainer: {
-    flexDirection: 'row',
-    height: 40,
-    width: '100%',
-    position: 'relative',
-    top: 80, // space below the search bar
-    borderColor: '#aaa',
-    borderWidth: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2, // 2nd highest, higher than resultsContainer, lower than searchContainer
-  },
-  dropdown: {
-    height: Platform.OS === 'web' ? 40 : 50,
-    width: '50%',
-    fontSize: 16,
   },
 
   // Results List
