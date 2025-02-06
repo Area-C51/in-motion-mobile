@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 // interface to define types for the Exercise object
 export interface Exercise {
@@ -19,6 +20,7 @@ const scaleFontSize = (size: number) => {
 };
 
 interface ExerciseItemProps {
+  iconColor: string;
   exercise: Exercise;
   expandedExerciseId: string | null;
   setExpandedExerciseId: (id: string | null) => void;
@@ -27,116 +29,137 @@ interface ExerciseItemProps {
 
 // ExerciseItem component with TS type React.FC (React Function Component), tells TS that this component is a function component whose props match the ExerciseItemProps interface and automatically adds type checking for the props
 const ExerciseItem: React.FC<ExerciseItemProps> = ({
+  iconColor,
   exercise, // contains the data for each specific exercise, e.g., id, images, etc.
   // with modularized code, necessary pieces of state and their updated functions are passed as props (below), decoupling the component from the parent’s state management and making the component reusable elsewhere, e.g., saved user workouts
   expandedExerciseId,
   setExpandedExerciseId,
   setSelectedImage,
 }) => {
+  const isExpanded = expandedExerciseId === exercise.id;
+
   return (
     <View style={styles.resultItem}>
-      <Text style={styles.exerciseName}>{exercise.name}</Text>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {/* Opens menu to add to workout – WIP */}}
-        accessibilityLabel="Add exercise to workouts"
-        accessibilityHint="Tap to add this exercise to your workouts"
-        accessible={true} // ensures focusable by the screen reader
-        focusable={true} // ensures focusable with keyboard navigation or screen reader
-        onFocus={() => console.log("Button focused")}
-      >
-        <Text style={styles.addText}>+</Text>
-      </TouchableOpacity>
-
-      <View style={styles.imageContainer}>
-        {Array.isArray(exercise.images) ? (
-          exercise.images.map((imageUrl, index) => (
-            <Pressable
-              key={index}
-              style={[
-                styles.pressableImage,
-                { marginRight: index === exercise.images.length - 1 ? 0 : 5 }, // dynamically set marginRight (creates center space without adding right margin to 2nd of paired images)
-              ]}
-              onPress={() => setSelectedImage(imageUrl)}
-              accessibilityLabel="Expand Image"
-              accessibilityHint={`Tap to expand this image for ${exercise.name}`}
-              accessible={true}
-              focusable={true}
-              onFocus={() => console.log("Button focused")}
-            >
-              <Image
-                source={{ uri: imageUrl }}
-                style={styles.exerciseImage}
-                accessibilityLabel={`Exercise image for ${exercise.name}`}
-              />
-            </Pressable>
-          ))
-        ) : (
-          <Text>No images available</Text> // fallback if `exercise.images` isn't an array
-        )}
+      <View style={styles.headerRow}>
+        <Text style={styles.exerciseName}>{exercise.name}</Text>
+        <View style={styles.iconRow}>
+        <TouchableOpacity
+          // style={styles.}
+          onPress={() => setExpandedExerciseId(isExpanded ? null : exercise.id)}
+          accessibilityLabel="Expand Exercise Details"
+          accessibilityHint={`Tap to ${isExpanded ? 'collapse' : 'expand'} exercise details for ${exercise.name}`}
+          accessible={true} // ensures focusable by the screen reader
+          focusable={true} // ensures focusable with keyboard navigation or screen reader
+          onFocus={() => console.log("Button focused")}
+        >
+          <IconSymbol size={scaleFontSize(26)} name={'info.circle'} color={iconColor} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          // style={styles.}
+          onPress={() => {/* Opens menu to add to workout – WIP */}}
+          accessibilityLabel="Add exercise to workouts"
+          accessibilityHint={`Tap to add ${exercise.name} to your workouts`}
+          accessible={true}
+          focusable={true}
+          onFocus={() => console.log("Button focused")}
+        >
+          <IconSymbol size={scaleFontSize(26)} name={'bookmark'} color={iconColor} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          // style={styles.}
+          onPress={() => {/* Opens menu to share exercise – WIP */}}
+          accessibilityLabel="Share exercise"
+          accessibilityHint={`Tap to share ${exercise.name}`}
+          accessible={true}
+          focusable={true}
+          onFocus={() => console.log("Button focused")}
+        >
+          <IconSymbol size={scaleFontSize(26)} name={'arrowshape.turn.up.right'} color={iconColor} />
+        </TouchableOpacity>
       </View>
+    </View>
 
-      <Pressable
-        onPress={() => setExpandedExerciseId(expandedExerciseId === exercise.id ? null : exercise.id)}
-        style={styles.expandButton}
-        accessibilityLabel="Expand Exercise Details"
-        accessibilityHint={`Tap to expand exercise details for ${exercise.name}`}
-        accessible={true}
-        focusable={true}
-        onFocus={() => console.log("Button focused")}
-      >
-        {expandedExerciseId === exercise.id ? (
-          <View
+    <View style={styles.imageContainer}>
+      {Array.isArray(exercise.images) ? (
+        exercise.images.map((imageUrl, index) => (
+          <Pressable
+            key={index}
+            style={[
+              styles.pressableImage,
+              { marginRight: index === exercise.images.length - 1 ? 0 : 15 }, // dynamically set marginRight (creates center space without adding right margin to 2nd of paired images)
+            ]}
+            onPress={() => setSelectedImage(imageUrl)}
+            accessibilityLabel="Expand Image"
+            accessibilityHint={`Tap to expand this image for ${exercise.name}`}
+            accessible={true}
+            focusable={true}
+            onFocus={() => console.log("Button focused")}
+          >
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.exerciseImage}
+              accessibilityLabel={`Exercise image for ${exercise.name}`}
+            />
+          </Pressable>
+        ))
+      ) : (
+        <Text>No images available</Text> // fallback if `exercise.images` isn't an array
+      )}
+    </View>
+
+      {/* Expanded Details render below images only if this exercise is expanded */}
+      {isExpanded && (
+        <View
+          style={styles.expandedDetails}
           accessibilityLabel="Expanded Exercise Details"
-          accessibilityHint={`Tap to collapse exercise details for ${exercise.name}`}>
-            {/* <Text>
-              <Text style={styles.boldText}>Force:</Text> {exercise.force}
-            </Text>
-            <Text>
-              <Text style={styles.boldText}>Level:</Text> {exercise.level}
-            </Text>
-            <Text>
-              <Text style={styles.boldText}>Mechanic:</Text> {exercise.mechanic}
-            </Text>
-            <Text>
-              <Text style={styles.boldText}>Equipment:</Text> {exercise.equipment}
-            </Text> */}
-            <Text>
-              <Text style={styles.boldText}>Instructions:</Text> {exercise.instructions}
-            </Text>
-          </View>
-        ) : (
-          <Text style={styles.expandButtonText}>Tap to Expand</Text>
-        )}
-      </Pressable>
+          accessibilityHint={`Tap to collapse exercise details for ${exercise.name}`}
+        >
+          {/* <Text>
+            <Text style={styles.boldText}>Force:</Text> {exercise.force}
+          </Text>
+          <Text>
+            <Text style={styles.boldText}>Level:</Text> {exercise.level}
+          </Text>
+          <Text>
+            <Text style={styles.boldText}>Mechanic:</Text> {exercise.mechanic}
+          </Text>
+          <Text>
+            <Text style={styles.boldText}>Equipment:</Text> {exercise.equipment}
+          </Text> */}
+          <Text style={styles.expandedText}>
+            <Text style={styles.boldText}>Instructions:</Text> {exercise.instructions}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   resultItem: {
-    marginVertical: 5,
+    marginTop: 15,
   },
 
   // Exercise Header
-  exerciseName: {
-    fontSize: scaleFontSize(18), // relative to screen width
-    fontWeight: 'bold',
+  headerRow: {
+    flexDirection: 'row',
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
-    padding: 6,
-    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // marginBottom: 5,
+    borderWidth: 1,
     borderRadius: 10,
   },
-  addButton: {
-    width: 40,
-    position: 'absolute',
-    right: -10,
-  },
-  addText: {
-    fontSize: 24,
+  exerciseName: {
+    flex: 1,
+    fontSize: scaleFontSize(18), // relative to screen width
     fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'rgba(0, 0, 0, 0.7)',
+    padding: 6,
+    textAlign: 'left',
+  },
+  iconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   // Exercise Images
@@ -156,16 +179,16 @@ const styles = StyleSheet.create({
   },
   
   // Exercise Expanded
-  expandButton: {
-    borderColor: '#888',
-    borderWidth: 1,
-    borderRadius: 10,
+  expandedDetails: {
     backgroundColor: 'rgba(255, 255, 255, 0.90)',
+    borderWidth: 1,
+    borderColor: '#888',
+    borderRadius: 10,
     padding: 8,
+    // marginTop: 5,
   },
-  expandButtonText: {
+  expandedText: {
     fontSize: 14,
-    textAlign: 'center',
   },
   boldText: {
     fontWeight: 'bold',

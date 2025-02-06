@@ -25,6 +25,16 @@ const MAPPING = {
   'magnifyingglass': 'search', // dropdown submit button
   'xmark': 'remove', // tbd
   'ellipsis': 'menu', // tbd
+  'info.circle' : 'info-outline',
+  'info.circle.fill' : 'info',
+  'bookmark' : 'bookmark-outline',
+  'bookmark.fill' : 'bookmark',
+  'plus-circle' : 'add-circle-outline',
+  'plus-circle.fill' : 'add-circle',
+  'minus-circle' : 'remove-circle-outline',
+  'minus-circle.fill' : 'remove-circle',
+  'arrowshape.turn.up.right' : 'share',
+  'arrowshape.turn.up.right.fill' : 'share',
   'chevron.left.forwardslash.chevron.right': 'code', // none
   'chevron.right': 'chevron-right', // none
 } as Partial<

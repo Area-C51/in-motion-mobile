@@ -179,6 +179,7 @@ const App = () => {
   // each exercise item of the results container
   const renderExerciseItem = ({ item }: { item: Exercise }) => (
     <ExerciseItem
+      iconColor={iconColor}
       exercise={item}
       expandedExerciseId={expandedExerciseId}
       setExpandedExerciseId={setExpandedExerciseId}
