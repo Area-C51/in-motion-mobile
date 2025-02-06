@@ -1,4 +1,3 @@
-// rnfe -> reactNativeFunctionalExportComponent
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import immBackground from '@/assets/images/in-motion-orangegold-icon.png';
@@ -122,7 +121,6 @@ const App = () => {
 
   const aiExerciseSearch = async () => { // AI-assisted exercise search functionality
     const { searchTerm } = getSearchInputs();
-
     const queryParams: QueryParams = {}; // initial queryParams object
 
     // const queryParams = { query: searchTerm }; // AI query parameter
@@ -135,7 +133,6 @@ const App = () => {
       Alert.alert('Please enter a search.');
       return;
     }
-
     setLoading(true); // start loading
     // setError(''); // reset any previous errors
   
