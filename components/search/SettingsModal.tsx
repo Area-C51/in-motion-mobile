@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   searchSwitch: {
-    // transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // enlarges the switch
   },
 })
 

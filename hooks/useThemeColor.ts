@@ -1,5 +1,6 @@
-// accepts an object with optional light and dark overrides and a color name (such as "text" or "background")
-// returns the appropriate color value based on the current theme
+// this hook builds off of useColorScheme by selecting the correct color from the centralized Colors file based on the current theme
+// it accepts an object with optional overrides, e.g., { light: '#f00', dark: '#0f0' } and a color key, e.g., "text", "background", or "border"
+// if an override is provided, it is used, otherwise, it falls back to the default value defined in Colors[theme][colorName]
 // if a prop like lightColor or darkColor is passed directly into a component, that value takes precedence over the value defined in your Colors constants
 // to override the default color for a specific component instance, pass the lightColor or darkColor prop; otherwise, it will use the default color from your Colors file
 

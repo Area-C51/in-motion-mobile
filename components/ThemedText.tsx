@@ -1,5 +1,6 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
+// renders a standard Text component with its color set based on the them, pass a type prop, e.g., "title", "defaultSemiBold", etc., to use different text styles
 
+import { Text, type TextProps, StyleSheet } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 export type ThemedTextProps = TextProps & {

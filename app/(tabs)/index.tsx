@@ -13,7 +13,7 @@ const App = () => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.displayContainer}>
-        <Text style={styles.header}>Recent Workouts</Text>
+        <ThemedText style={styles.header}>Recent Workouts</ThemedText>
         <ScrollView horizontal style={styles.displayRow}>
             {mockRow1.map((el, index) =>
               <View key={`row1-${index}`} style={styles.displayCard}>
@@ -43,7 +43,6 @@ export default App
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    justifyContent: 'center',
   },
   displayContainer: {
     // borderWidth: 1,
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
     height: 'auto',
     width: '100%',
     // borderWidth: 1,
-    // overflow: 'scroll', // enforce scroll behavior, replaced with movile compatible ScrollView
   },
   displayCard: {
     paddingLeft: 20,

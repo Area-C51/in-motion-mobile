@@ -1,33 +1,34 @@
-// ThemedText
-// It renders a standard Text component with its color set based on the theme. You can pass a type prop (like "title", "defaultSemiBold", etc.) to use different text styles.
+// when the theme changes, via the system or a user override, the Theme Context updates
+// this causes useThemedStyles to re-run, because its dependency, theme, changed, and the new (updated) styles are applied automatically
 
 import React from 'react';
+import { View } from 'react-native';
 import ThemedText from '@/components/ThemedText';
+import ThemedView from '@/components/ThemedView';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export default function Example() {
+  const styles = useThemedStyles(); // call useThemedStyles to obtain the dynamic style object based on the current theme
+  // these styles are used on its root View and child elements rather than declaring styles in this file
+
   return (
-    <>
-      <ThemedText type="title">This is a title</ThemedText>
-      <ThemedText>
-        This is default text that will be black in light mode and white in dark mode.
-      </ThemedText>
-    </>
+    <ThemeProvider>
+      <ThemedView style={styles.container} >
+        <ThemedText type="title" style={styles.title}>This is a title</ThemedText>
+        <ThemedText>
+          This is default text that will be black in light mode and white in dark mode.
+        </ThemedText>
+        <View style={styles.box}>
+          <ThemedText style={styles.boxText}>
+            This box has a themed border.
+          </ThemedText>
+        </View>
+      </ThemedView>
+    </ThemeProvider>
   );
 }
 
-// ThemedView
-// It wraps a regular View and applies a background color based on the current theme.
-
-// import React from 'react';
-// import ThemedView from '@/components/ThemedView';
-
-// export function ExampleView() {
-//   return (
-//     <ThemedView style={{ flex: 1, padding: 20 }}>
-//       {/* Your content goes here */}
-//     </ThemedView>
-//   );
-// }
 
 // File Structure Recap:
 // constants/Colors.ts:

@@ -21,7 +21,7 @@ const { width, height } = Dimensions.get('window');
 //   height: height * 0.8, // 80% of the screen height
 //   width: width * 0.9, // 90% of the screen width
 // },
-const minScreenDimension = Math.min(width, height); 
+
 // allows scaling font size relative to screen width
 const scaleFontSize = (size: number) => {
   const { width } = Dimensions.get('window');
@@ -175,8 +175,8 @@ export default function Search() {
   );
   
   return (
-    <View style={styles.mainContainer}>
-      <ThemedView showDefaultBackgroundImage={!responseResults.length} style={styles.backgroundContainer} />
+    // ThemedView is now the mainContainer <View>, it returns a View with a background image element and any children element
+    <ThemedView showDefaultBackgroundImage={!responseResults.length} style={styles.mainContainer}>
       <View style={styles.contentContainer}>
         <SearchBar
           searchEntry={searchEntry}
@@ -224,21 +224,13 @@ export default function Search() {
         setSelectedImage={setSelectedImage}
         fadeDuration={100} // Customize the fade duration to 500ms (or any value you prefer)
       />
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    // flexDirection: 'column',
-  },
-  backgroundContainer: {
-    position: 'absolute',
-    height: minScreenDimension,
-    width: minScreenDimension,
-    top: (height - minScreenDimension) / 2,
-    left: (width - minScreenDimension) / 2,
   },
   contentContainer: {
     flex: 1,
@@ -252,7 +244,6 @@ const styles = StyleSheet.create({
     top: 80, // space for search bar
     paddingLeft: 10,
     paddingRight: 10,
-    // zIndex: 1, // lowest, lower than dropdownContainer
   },
   exerciseListPlaceholder: {
     fontSize: scaleFontSize(18), // relative to screen width

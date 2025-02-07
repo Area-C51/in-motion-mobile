@@ -8,10 +8,9 @@ const minScreenDimension = Math.min(width, height);
 
 export default function Workout() {
   return (
-    <View style={styles.mainContainer}>
-      <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
-        style={styles.backgroundContainer}
-      />
+    <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
+      style={styles.mainContainer}
+    >
       <View style={styles.workoutsContainer}>
         <Text style={[styles.text, {fontWeight: 800}]}>Where workouts go to workout</Text>
         <Text style={styles.text}>* Search button vs bar</Text>
@@ -21,7 +20,7 @@ export default function Workout() {
         <Text style={styles.text}>* Workouts open as a modal/component with X button to exit back</Text>
         <Text style={styles.text}>* Drag and drop to rearrange exercise order</Text>
       </View>
-    </View>
+    </ThemedView>
   )
 }
 
@@ -29,15 +28,8 @@ const styles = StyleSheet.create ({
   mainContainer: {
     flex: 1,
   },
-  backgroundContainer: {
-    position: 'absolute',
-    height: minScreenDimension,
-    width: minScreenDimension,
-    top: (height - minScreenDimension) / 2,
-    left: (width - minScreenDimension) / 2,
-  },
   workoutsContainer: {
-    flex: 1,
+    // flex: 1,
     top: (height - minScreenDimension) / 2,
     left: (width - minScreenDimension) / 2,
     padding: 20,
@@ -48,4 +40,4 @@ const styles = StyleSheet.create ({
     color: 'white',
     padding: 5,
   },
-}) 
+})
