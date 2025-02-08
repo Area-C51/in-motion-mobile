@@ -38,96 +38,96 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-        {/* Search container, runs basic or AI assisted search if toggled on */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchTextInput}
-            placeholder="Search exercises by name"
-            value={searchEntry} // bind the TextInput to state
-            onChangeText={setSearchEntry} // update the searchEntry state as the user types
-            onSubmitEditing={aiEnabled ? aiExerciseSearch : exerciseSearch} // trigger search when "Enter" is pressed
-            accessibilityLabel="Search for exercises"
-            accessibilityHint="Enter the name of an exercise to search"
-            accessible={true}
-            focusable={true}
-            onFocus={() => console.log("Search bar focused")}
-          />
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={exerciseSearch} // only works with basic search
-            accessibilityLabel="Search for exercises"
-            accessibilityHint="Submit the search query"
-            accessible={true}
-            focusable={true}
-            onFocus={() => console.log("Search button focused")}
-          >
-            <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
-          </TouchableOpacity>
-  
-          {/* Clear button is conditionally displayed if actively searching */}
-          {searchEntry ? (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => setSearchEntry('')}
-              accessibilityLabel="Clear search"
-              accessibilityHint="Clear the search input"  
-              accessible={true}
-              focusable={true}
-              onFocus={() => console.log("Button focused")}      
-            >
-              <Text style={styles.clearText}>X</Text>
-            </TouchableOpacity>
-          ) : null}
+      {/* Search container, runs basic or AI assisted search if toggled on */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchTextInput}
+          placeholder="Search exercises by name"
+          value={searchEntry} // bind the TextInput to state
+          onChangeText={setSearchEntry} // update the searchEntry state as the user types
+          onSubmitEditing={aiEnabled ? aiExerciseSearch : exerciseSearch} // trigger search when "Enter" is pressed
+          accessibilityLabel="Search for exercises"
+          accessibilityHint="Enter the name of an exercise to search"
+          accessible={true}
+          focusable={true}
+          onFocus={() => console.log("Search bar focused")}
+        />
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={exerciseSearch} // only works with basic search
+          accessibilityLabel="Search for exercises"
+          accessibilityHint="Submit the search query"
+          accessible={true}
+          focusable={true}
+          onFocus={() => console.log("Search button focused")}
+        >
+          <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
+        </TouchableOpacity>
 
-          {/* Search setting button to open search settings menu */}
+        {/* Clear button is conditionally displayed if actively searching */}
+        {searchEntry ? (
           <TouchableOpacity
-            style={styles.searchSettingsButton}
-            onPress={toggleSearchModal}
-            accessibilityLabel="Search settings"
-            accessibilityHint="Open search settings menu"
+            style={styles.clearButton}
+            onPress={() => setSearchEntry('')}
+            accessibilityLabel="Clear search"
+            accessibilityHint="Clear the search input"  
             accessible={true}
             focusable={true}
-            onFocus={() => console.log("Button focused")}
+            onFocus={() => console.log("Button focused")}      
           >
-            <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
+            <Text style={styles.clearText}>X</Text>
           </TouchableOpacity>
-        </View>
+        ) : null}
 
-        {/* Dropdown container displays dropdowns and submit button if toggled*/}
-        {dropdownsEnabled ? (
-          <View style={styles.dropdownContainer}>
-            <Picker
-            selectedValue={muscle}
-            onValueChange={(itemValue) => setMuscle(itemValue)}
+        {/* Search setting button to open search settings menu */}
+        <TouchableOpacity
+          style={styles.searchSettingsButton}
+          onPress={toggleSearchModal}
+          accessibilityLabel="Search settings"
+          accessibilityHint="Open search settings menu"
+          accessible={true}
+          focusable={true}
+          onFocus={() => console.log("Button focused")}
+        >
+          <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Dropdown container displays dropdowns and submit button if toggled*/}
+      {dropdownsEnabled ? (
+        <View style={styles.dropdownContainer}>
+          <Picker
+          selectedValue={muscle}
+          onValueChange={(itemValue) => setMuscle(itemValue)}
+          style={styles.dropdown}
+          >
+            <Picker.Item label="Select Muscle" value="" />
+            {muscleOptions.map((m, index) => (
+              <Picker.Item key={index} label={m} value={m} />
+            ))}
+          </Picker>
+
+          {/* Category Picker */}
+          <Picker
+            selectedValue={category}
+            onValueChange={(itemValue) => setCategory(itemValue)}
             style={styles.dropdown}
-            >
-              <Picker.Item label="Select Muscle" value="" />
-              {muscleOptions.map((m, index) => (
-                <Picker.Item key={index} label={m} value={m} />
-              ))}
-            </Picker>
-
-            {/* Category Picker */}
-            <Picker
-              selectedValue={category}
-              onValueChange={(itemValue) => setCategory(itemValue)}
-              style={styles.dropdown}
-            >
-              <Picker.Item label="Select Category" value="" />
-              {categoryOptions.map((c, index) => (
-                <Picker.Item key={index} label={c} value={c} />
-              ))}
-            </Picker>
-          </View>
-          ) : null
-        }
+          >
+            <Picker.Item label="Select Category" value="" />
+            {categoryOptions.map((c, index) => (
+              <Picker.Item key={index} label={c} value={c} />
+            ))}
+          </Picker>
+        </View>
+        ) : null
+      }
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    // width: '100%',
   },
   // Search Bar
   searchContainer: {
@@ -149,10 +149,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: 45,
     width: 40,
-    // borderWidth: 1, // only to visualize the button over the search bar
-    // borderColor: '#aaa',
     padding: 8,
-    // backgroundColor: '#fff', // only to visualize the button over the search bar
     alignContent: 'center',
     justifyContent: 'center',
   },
@@ -161,7 +158,6 @@ const styles = StyleSheet.create({
     right: 20,
     height: 45,
     width: 50,
-    // borderWidth: 1, // only to visualize the button over the search bar
     paddingLeft: 10,
     justifyContent: 'center',
   },

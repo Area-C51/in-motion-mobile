@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
     width: '100%',
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingHorizontal: 20,
+    // paddingRight: 10,
   },
 })

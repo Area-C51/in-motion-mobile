@@ -29,72 +29,67 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   }, [isMenuVisible]);
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isMenuVisible}
-        onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
-        accessibilityLabel="Search Settings Modal"
-        accessibilityHint="Modal containing additional search settings"
-        accessible={true}
-        focusable={true}
-      >
-        {/* The first TouchableWithoutFeedback wraps the entire overlay (modalOverlay) and closes the modal when touched */}
-        <TouchableWithoutFeedback onPress={toggleSearchModal} accessibilityLabel="Close search settings">
-          <View style={styles.modalOverlay}>
-            {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
-            <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()} accessible={false}>
-              <Animated.View
-                style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}
-                accessibilityLabel="Search Settings Options"
-                accessible={true}
-                focusable={true}
-              >
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={isMenuVisible}
+      onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
+      accessibilityLabel="Search Settings Modal"
+      accessibilityHint="Modal containing additional search settings"
+      accessible={true}
+      focusable={true}
+    >
+      {/* The first TouchableWithoutFeedback wraps the entire overlay (modalOverlay) and closes the modal when touched */}
+      <TouchableWithoutFeedback onPress={toggleSearchModal} accessibilityLabel="Close search settings">
+        <View style={styles.modalContainer}>
+          {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
+          <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()} accessible={false}>
+            <Animated.View
+              style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}
+              accessibilityLabel="Search Settings Options"
+              accessible={true}
+              focusable={true}
+            >
 
-                {/* Toggle for Dropdown Search */}
-                <View style={styles.switchContainer}>
-                  <Text style={styles.searchModalText} accessibilityLabel="Dropdown search toggle label">
-                    Dropdowns
-                  </Text>
-                  <Switch
-                    style={styles.searchSwitch}
-                    value={dropdownsEnabled}
-                    onValueChange={setDropdownsEnabled}
-                    accessibilityLabel="Toggle dropdown search"
-                    accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} dropdown search options`}
-                  />
-                </View>
+              {/* Toggle for Dropdown Search */}
+              <View style={styles.switchContainer}>
+                <Text style={styles.searchModalText} accessibilityLabel="Dropdown search toggle label">
+                  Dropdowns
+                </Text>
+                <Switch
+                  style={styles.searchSwitch}
+                  value={dropdownsEnabled}
+                  onValueChange={setDropdownsEnabled}
+                  accessibilityLabel="Toggle dropdown search"
+                  accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} dropdown search options`}
+                />
+              </View>
 
-                {/* Toggle for AI Search */}
-                <View style={styles.switchContainer}>
-                  <Text style={styles.searchModalText} accessibilityLabel="AI search toggle label">
-                    AI Search
-                  </Text>
-                  <Switch
-                    style={styles.searchSwitch}
-                    value={aiEnabled}
-                    onValueChange={setAiEnabled}
-                    // thumbColor={aiEnabled ? 'rgb(0, 0, 0)' : 'rgb(245, 245, 245)'} // can change the switch color for on/off
-                    // trackColor={{ false: '#767577', true: '#34C759' }} // can change the track color for on/off
-                    accessibilityLabel="Toggle AI search"
-                    accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} AI-assisted search`}
-                  />
-                </View>
-              </Animated.View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </View>
+              {/* Toggle for AI Search */}
+              <View style={styles.switchContainer}>
+                <Text style={styles.searchModalText} accessibilityLabel="AI search toggle label">
+                  AI Search
+                </Text>
+                <Switch
+                  style={styles.searchSwitch}
+                  value={aiEnabled}
+                  onValueChange={setAiEnabled}
+                  // thumbColor={aiEnabled ? 'rgb(0, 0, 0)' : 'rgb(245, 245, 245)'} // can change the switch color for on/off
+                  // trackColor={{ false: '#767577', true: '#34C759' }} // can change the track color for on/off
+                  accessibilityLabel="Toggle AI search"
+                  accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} AI-assisted search`}
+                />
+              </View>
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
-  modalOverlay: {
+  modalContainer: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'flex-end',

@@ -32,8 +32,8 @@ export const GlobalStyles = StyleSheet.create({
   display: { // will hold images eventually and no text
     height: width * 0.4,
     width: width * 0.4,
-    fontSize: 16, // placeholder
-    color: 'white', // placeholder
+    // fontSize: 16, // placeholder, defaults to type={'text'}
+    // color: 'white', // placeholder, defaults to type={'text'}
     borderRadius: 10,
     textAlign: 'justify', // placeholder
     padding: 10, // placeholder
@@ -120,14 +120,6 @@ export const getGlobalStyles = (theme: 'light' | 'dark') =>
     },
   
     header: {
-      fontSize: 22,
-      fontWeight: '800',
-      color: Colors[theme].header,
       paddingLeft: 20,
-    },
-    title: {
-      fontSize: 16,
-      fontWeight: '700',
-      color: Colors[theme].subText,
     },
   });

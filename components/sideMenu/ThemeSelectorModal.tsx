@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useTheme } from '@/contexts/ThemeProvider';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
+import ThemedView from '@/components/ThemedView';
 
 const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   const { theme, setTheme } = useTheme();
@@ -14,22 +17,30 @@ const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: (
   };
 
   return (
-    <Modal visible={visible} transparent animationType="slide">
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.header}>Select Theme</Text>
-          {['system', 'light', 'dark'].map((theme) => (
-            <TouchableOpacity key={theme} style={styles.option} onPress={() => handleSelection(theme as any)}>
-              <ThemedText style={[styles.optionText, selectedTheme === theme && styles.selected]}>
-                {theme.charAt(0).toUpperCase() + theme.slice(1)}
-              </ThemedText>
-            </TouchableOpacity>
-          ))}
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeText}>Close</Text>
-          </TouchableOpacity>
+    <Modal
+      animationType="none"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose} // allows closing modal with back button (Android)
+      accessibilityLabel="Light/Dark Theme Modal"
+      accessibilityHint="Modal containing Theme option settings"
+      accessible={true}
+      focusable={true}
+    >
+      <TouchableWithoutFeedback onPress={onClose} accessibilityLabel="Close theme settings">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ThemedText type={'header'}>Theme</ThemedText>
+            {['system', 'light', 'dark'].map((theme) => (
+              <TouchableOpacity key={theme} style={styles.option} onPress={() => handleSelection(theme as any)}>
+                <ThemedText style={[styles.optionText, selectedTheme === theme && styles.selected]}>
+                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                </ThemedText>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -37,9 +48,9 @@ const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: (
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)'
   },
   modalContent: {
     backgroundColor: 'white',
@@ -47,38 +58,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '80%',
     alignItems: 'center'
-
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10
-
   },
   option: {
     padding: 10,
     width: '100%',
     alignItems: 'center'
-
   },
   optionText: {
     fontSize: 18
-
   },
   selected: {
     fontWeight: 'bold',
     color: 'blue'
-  },
-  closeButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: 'gray',
-    borderRadius: 5
-  },
-  closeText: {
-    color: 'white',
-    fontSize: 16
-    
   },
 });
 

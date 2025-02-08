@@ -5,6 +5,7 @@ import { Link } from 'expo-router';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
+import ThemedView from '@/components/ThemedView';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,15 +29,36 @@ const Home = () => {
   const tStyles = getGlobalStyles(theme); // get theme-aware styles
 
   return (
-    <View style={gStyles.mainContainer}>
+    <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
+      style={gStyles.mainContainer}
+    >
+    {/* <View style={gStyles.mainContainer}> */}
       <View style={gStyles.contentContainer}>
         <View style={styles.displayContainer}>
-          <ThemedText style={tStyles.header}>Recent Workouts</ThemedText>
+          <ThemedText type={'header'} style={tStyles.header}>Header Header</ThemedText>
+          <ScrollView horizontal style={gStyles.displayRow}>
+              {mockRow1.map((el, index) =>
+                <View key={`row1-${index}`} style={gStyles.displayCard}>
+                  {/* <Text style={gStyles.display}>{el[1]}</Text> */}
+                  {/* <Text style={tStyles.title}>{el[0]}</Text> */}
+                  <ThemedText type={'text'} style={gStyles.display}>Text Text {el[1]}</ThemedText>
+                  <ThemedText type={'detail'}>Detail Option 1</ThemedText>
+                  <ThemedText type={'detail'}>Detail Option 2</ThemedText>
+                  <ThemedText type={'title'}>Title Title {el[0]}</ThemedText>
+                  <ThemedText type={'subtitle'}>Subtitle Subtitle</ThemedText>
+                  <ThemedText type={'text'}>Text Text</ThemedText>
+                  <ThemedText type={'subtext'}>Subtext Subtext</ThemedText>
+                </View>
+              )}
+          </ScrollView>
+        </View>
+        <View style={styles.displayContainer}>
+          <ThemedText type={'header'} style={tStyles.header}>Recent Workouts</ThemedText>
           <ScrollView horizontal style={gStyles.displayRow}>
               {mockRow1.map((el, index) =>
                 <View key={`row1-${index}`} style={gStyles.displayCard}>
                   <Text style={gStyles.display}>{el[1]}</Text>
-                  <Text style={tStyles.title}>{el[0]}</Text>
+                  <ThemedText type={'title'}>{el[0]}</ThemedText>
                 </View>
               )}
           </ScrollView>
@@ -47,13 +69,14 @@ const Home = () => {
             {mockRow2.map((el, index) =>
               <View key={`row2-${index}`} style={gStyles.displayCard}>
                 <Text style={gStyles.display}>{el[1]}</Text>
-                <Text style={tStyles.title}>{el[0]}</Text>
+                <ThemedText type={'title'}>{el[0]}</ThemedText>
               </View>
             )}
           </ScrollView>
         </View>
       </View>
-    </View>
+    {/* </View> */}
+    </ThemedView>
   )
 }
 
