@@ -10,8 +10,11 @@ const tintColorDark = 'rgb(255,255,255)';
 
 export const Colors = {
   light: {
+    header: 'rgb(17,24,28)', // '#11181C',
     text: 'rgb(17,24,28)', // '#11181C',
+    subText: 'rgb(17,24,28)', // '#11181C',
     background: 'rgb(255,255,255)', // #fff',
+    cardBackground: 'rgb(255,255,255)', // #fff',
     tint: tintColorLight,
     border: 'rgb(221,221,221)', // #dddddd',
     primary: 'rgb(52,152,219)', // '#3498db',
@@ -21,8 +24,11 @@ export const Colors = {
     tabIconSelected: tintColorLight,
   },
   dark: {
+    header: 'rgb(236,237,238)',
     text: 'rgb(236,237,238)', // '#ECEDEE',
+    subText: 'rgb(236,237,238)', // '#ECEDEE',
     background: 'rgb(21,23,24)', // '#151718',
+    cardBackground: 'rgb(21,23,24)', // '#151718',
     tint: tintColorDark,
     border: 'rgb(68,68,68)', // '#444444',
     primary: 'rgb(155,89,182)', // '#9b59b6',

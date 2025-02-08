@@ -16,7 +16,7 @@ export default function Example() {
     <ThemeProvider>
       <ThemedView style={styles.container} >
         <ThemedText type="title" style={styles.title}>This is a title</ThemedText>
-        <ThemedText>
+        <ThemedText type='default'>
           This is default text that will be black in light mode and white in dark mode.
         </ThemedText>
         <View style={styles.box}>

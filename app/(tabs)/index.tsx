@@ -6,8 +6,20 @@ import ThemedText from '@/components/ThemedText';
 
 const { width, height } = Dimensions.get('window');
 
-const mockRow1 = [['Title1.1', `Row of side scrolling workouts`], ['Title1.2', `With Title and random 1x1 ratio exercise image in the workout`], ['Title1.3', `If no workouts`], ['Title1.4', `Display Title as 'Add New Workout' and a 1x1 icon of a + in place of an image`], ['Title1.5', 'lorem ipsum dolor sit amet']];
-const mockRow2 = [['Title2.1', `Row of 10 side scrolling random or even suggested exercises`], ['Title2.2', `With Title and 1x1 image`], ['Title2.3', `11th element is Titled 'Refresh for More'`], ['Title2.4', `And a 1x1 icon of a 'refresh' icon in place of an image`], ['Title2.5', `Which reloads 10 exercises (that were not just displayed)`]];
+const mockRow1 = [
+  ['Title1.1', `Row of side scrolling workouts`],
+  ['Title1.2', `With Title and random 1x1 ratio exercise image in the workout`],
+  ['Title1.3', `If no workouts`],
+  ['Title1.4', `Display Title as 'Add New Workout' and a 1x1 icon of a + in place of an image`],
+  ['Title1.5', 'lorem ipsum dolor sit amet'],
+];
+const mockRow2 = [
+  ['Title2.1', `Row of 10 side scrolling random or even suggested exercises`],
+  ['Title2.2', `With Title and 1x1 image`],
+  ['Title2.3', `11th element is Titled 'Refresh for More'`],
+  ['Title2.4', `And a 1x1 icon of a 'refresh' icon in place of an image`],
+  ['Title2.5', `Which reloads 10 exercises (that were not just displayed)`],
+];
 
 const App = () => {
   return (
