@@ -12,7 +12,7 @@ export const Colors = {
   light: {
     header: 'rgb(17,24,28)', // '#11181C',
     text: 'rgb(17,24,28)', // '#11181C',
-    subText: 'rgb(17,24,28)', // '#11181C',
+    subText: 'rgb(135, 135, 135)',
     background: 'rgb(255,255,255)', // #fff',
     cardBackground: 'rgb(255,255,255)', // #fff',
     tint: tintColorLight,
@@ -26,7 +26,7 @@ export const Colors = {
   dark: {
     header: 'rgb(236,237,238)',
     text: 'rgb(236,237,238)', // '#ECEDEE',
-    subText: 'rgb(236,237,238)', // '#ECEDEE',
+    subText: 'rgb(120, 120, 120)',
     background: 'rgb(21,23,24)', // '#151718',
     cardBackground: 'rgb(21,23,24)', // '#151718',
     tint: tintColorDark,

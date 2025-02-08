@@ -1,21 +1,46 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors'
+
+const { width, height } = Dimensions.get('window');
 
 export const GlobalStyles = StyleSheet.create({
   // Layout
-  container: {
+  mainContainer: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 20,
   },
-  row: {
+  contentContainer: {
+    flex: 1,
+    top: 35, // space for the status bar on mobile
+  },
+
+
+  displayRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    height: 'auto',
+    width: '100%',
+    // alignItems: 'center',
+    // justifyContent: 'space-between',
   },
-  center: {
+  // center: {
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
+  displayCard: {
+    paddingLeft: 20,
+    justifyContent: 'center',
+  },
+  display: { // will hold images eventually and no text
+    height: width * 0.4,
+    width: width * 0.4,
+    fontSize: 16, // placeholder
+    color: 'white', // placeholder
+    borderRadius: 10,
+    textAlign: 'justify', // placeholder
+    padding: 10, // placeholder
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', // placeholder
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 15,
   },
 
   // Spacing
@@ -71,28 +96,38 @@ export const GlobalStyles = StyleSheet.create({
   },
 });
 
-// Function to generate theme-dependent styles
+// function to generate theme-dependent styles
 export const getGlobalStyles = (theme: 'light' | 'dark') =>
   StyleSheet.create({
-    container: {
-      backgroundColor: Colors[theme].background, // Theme-aware background
-    },
+    // container: {
+    //   backgroundColor: Colors[theme].background,
+    // },
     card: {
-      backgroundColor: Colors[theme].cardBackground, // Theme-aware card
-      borderColor: Colors[theme].border, // Theme-aware border
+      backgroundColor: Colors[theme].cardBackground,
+      borderColor: Colors[theme].border,
       borderWidth: 1,
       borderRadius: 10,
       padding: 10,
     },
+    placeholder: { // used when list content does not exist, i.e., exercise and workout search results
+      top: height * 0.1,
+      // fontSize: scaleFontSize(18), // relative to screen width
+      fontSize: 22,
+      fontWeight: '800',
+      color: Colors[theme].header,
+      padding: 6,
+      textAlign: 'center',
+    },
+  
     header: {
       fontSize: 22,
       fontWeight: '800',
-      color: Colors[theme].header, // Theme-aware header color
+      color: Colors[theme].header,
       paddingLeft: 20,
     },
     title: {
       fontSize: 16,
       fontWeight: '700',
-      color: Colors[theme].text, // Theme-aware text color
+      color: Colors[theme].subText,
     },
   });

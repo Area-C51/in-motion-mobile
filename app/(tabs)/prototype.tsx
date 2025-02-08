@@ -3,6 +3,8 @@
 
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
 import ThemedView from '@/components/ThemedView';
 import ThemeSelectorModal from '@/components/sideMenu/ThemeSelectorModal';

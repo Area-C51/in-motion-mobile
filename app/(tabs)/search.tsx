@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
 import ThemedView from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
@@ -52,6 +54,9 @@ export default function Search() {
   const [isMenuVisible, setIsMenuVisible] = useState(false); // search settings menu
   const [dropdownsEnabled, setDropdownsEnabled] = useState(false); // additional search dropdowns
   const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
+
+  const theme = useColorScheme();
+  const tStyles = getGlobalStyles(theme);
 
   const toggleSearchModal = () => {
     setIsMenuVisible(prevState => !prevState);
@@ -176,8 +181,8 @@ export default function Search() {
   
   return (
     // ThemedView is now the mainContainer <View>, it returns a View with a background image element and any children element
-    <ThemedView showDefaultBackgroundImage={!responseResults.length} style={styles.mainContainer}>
-      <View style={styles.contentContainer}>
+    <ThemedView showDefaultBackgroundImage={!responseResults.length} style={gStyles.mainContainer}>
+      <View style={gStyles.contentContainer}>
         <SearchBar
           searchEntry={searchEntry}
           setSearchEntry={setSearchEntry}
@@ -213,7 +218,7 @@ export default function Search() {
               keyExtractor={(item) => item.id}
             />
           ) : (
-            <Text style={[styles.exerciseListPlaceholder, {top: 50}]}>Please search for an exercise</Text>
+            <Text style={tStyles.placeholder}>Please search for an exercise</Text>
           )}
         </View>
       </View>
@@ -229,28 +234,12 @@ export default function Search() {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
-  },
-
   // Results List
   resultsContainer: {
     flex: 1,
     position: 'relative',
     width: '100%',
-    top: 80, // space for search bar
     paddingLeft: 10,
     paddingRight: 10,
-  },
-  exerciseListPlaceholder: {
-    fontSize: scaleFontSize(18), // relative to screen width
-    fontWeight: '700',
-    backgroundColor: 'rgba(255, 255, 255, 0.90)',
-    padding: 6,
-    textAlign: 'center',
-    borderRadius: 10,
   },
 })

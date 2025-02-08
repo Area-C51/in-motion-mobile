@@ -3,7 +3,7 @@ import React from 'react';
 import { Dimensions, Pressable, ScrollView , StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { getGlobalStyles, GlobalStyles } from '@/constants/GlobalStyles';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
 
 const { width, height } = Dimensions.get('window');
@@ -25,31 +25,33 @@ const mockRow2 = [
 
 const Home = () => {
   const theme = useColorScheme(); // get current theme
-  const themeStyles = getGlobalStyles(theme); // get theme-aware styles
+  const tStyles = getGlobalStyles(theme); // get theme-aware styles
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.displayContainer}>
-        <ThemedText style={styles.header}>Recent Workouts</ThemedText>
-        <ScrollView horizontal style={styles.displayRow}>
-            {mockRow1.map((el, index) =>
-              <View key={`row1-${index}`} style={styles.displayCard}>
-                <Text style={styles.ideas}>{el[1]}</Text>
-                <Text style={styles.title}>{el[0]}</Text>
+    <View style={gStyles.mainContainer}>
+      <View style={gStyles.contentContainer}>
+        <View style={styles.displayContainer}>
+          <ThemedText style={tStyles.header}>Recent Workouts</ThemedText>
+          <ScrollView horizontal style={gStyles.displayRow}>
+              {mockRow1.map((el, index) =>
+                <View key={`row1-${index}`} style={gStyles.displayCard}>
+                  <Text style={gStyles.display}>{el[1]}</Text>
+                  <Text style={tStyles.title}>{el[0]}</Text>
+                </View>
+              )}
+          </ScrollView>
+        </View>
+        <View style={styles.displayContainer}>
+          <ThemedText style={tStyles.header}>Fresh Finds</ThemedText>
+          <ScrollView horizontal style={gStyles.displayRow}>
+            {mockRow2.map((el, index) =>
+              <View key={`row2-${index}`} style={gStyles.displayCard}>
+                <Text style={gStyles.display}>{el[1]}</Text>
+                <Text style={tStyles.title}>{el[0]}</Text>
               </View>
             )}
-        </ScrollView>
-      </View>
-      <View style={styles.displayContainer}>
-        <Text style={styles.header}>Fresh Finds</Text>
-        <ScrollView horizontal style={styles.displayRow}>
-          {mockRow2.map((el, index) =>
-            <View key={`row2-${index}`} style={styles.displayCard}>
-              <Text style={styles.ideas}>{el[1]}</Text>
-              <Text style={styles.title}>{el[0]}</Text>
-            </View>
-          )}
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
     </View>
   )
@@ -58,45 +60,8 @@ const Home = () => {
 export default Home
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
   displayContainer: {
     // borderWidth: 1,
-    paddingVertical: 20,
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: '800',
-    // borderWidth: 1,
-    paddingLeft: 20,
-  },
-  displayRow: {
-    flexDirection: 'row',
-    height: 'auto',
-    width: '100%',
-    // borderWidth: 1,
-  },
-  displayCard: {
-    paddingLeft: 20,
-    justifyContent: 'center',
-  },
-  ideas: {
-    height: width * 0.4,
-    width: width * 0.4,
-    fontSize: 16,
-    color: 'white',
-    borderRadius: 10,
-    textAlign: 'justify',
-    padding: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 15,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: 'rgb(120, 120, 120)',
+    paddingVertical: 40,
   },
 })

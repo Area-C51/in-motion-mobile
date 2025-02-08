@@ -131,11 +131,9 @@ const styles = StyleSheet.create({
   },
   // Search Bar
   searchContainer: {
-    position: 'absolute',
-    top: 35, // space for the status bar on mobile
+    position: 'relative',
     width: '100%',
     justifyContent: 'center',
-    zIndex: 3, // highest, higher than dropdownContainer
   },
   searchTextInput: {
     height: 45,
@@ -146,7 +144,6 @@ const styles = StyleSheet.create({
     paddingLeft: 40, // space for the submit button
     paddingRight: 70, // space for the "X" and search menu buttons
     backgroundColor: '#fff',
-    zIndex: 2,
   },
   submitButton: {
     position: 'absolute',
@@ -158,7 +155,6 @@ const styles = StyleSheet.create({
     // backgroundColor: '#fff', // only to visualize the button over the search bar
     alignContent: 'center',
     justifyContent: 'center',
-    zIndex: 4,
   },
   clearButton: {
     position: 'absolute',
@@ -168,7 +164,6 @@ const styles = StyleSheet.create({
     // borderWidth: 1, // only to visualize the button over the search bar
     paddingLeft: 10,
     justifyContent: 'center',
-    zIndex: 3,
   },
   clearText: {
     fontSize: 20,
@@ -188,14 +183,12 @@ const styles = StyleSheet.create({
     // backgroundColor: '#fff', // only to visualize the button over the search bar
     alignContent: 'center',
     justifyContent: 'center',
-    zIndex: 4,
   },
 
   // Dropdown Options
   dropdownContainer: {
     flexDirection: 'row',
     position: 'relative',
-    top: 80, // space below the search bar
     height: 40,
     width: '100%',
     borderWidth: 1,
@@ -203,7 +196,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 2, // 2nd highest, higher than resultsContainer, lower than searchContainer
   },
   dropdown: {
     height: Platform.OS === 'web' ? 40 : 50,
