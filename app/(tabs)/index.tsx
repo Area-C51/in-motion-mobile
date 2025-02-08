@@ -29,10 +29,10 @@ const Home = () => {
   const tStyles = getGlobalStyles(theme); // get theme-aware styles
 
   return (
-    <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
-      style={gStyles.mainContainer}
-    >
-    {/* <View style={gStyles.mainContainer}> */}
+    // <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
+    //   style={gStyles.mainContainer}
+    // >
+    <View style={gStyles.mainContainer}>
       <View style={gStyles.contentContainer}>
         <View style={styles.displayContainer}>
           <ThemedText type={'header'} style={tStyles.header}>Header Header</ThemedText>
@@ -75,8 +75,8 @@ const Home = () => {
           </ScrollView>
         </View>
       </View>
-    {/* </View> */}
-    </ThemedView>
+    </View>
+    // </ThemedView>
   )
 }
 

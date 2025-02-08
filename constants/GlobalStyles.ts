@@ -118,7 +118,9 @@ export const getGlobalStyles = (theme: 'light' | 'dark') =>
       padding: 6,
       textAlign: 'center',
     },
-  
+    menu: {
+      backgroundColor: Colors[theme].cardBackground,
+    },
     header: {
       paddingLeft: 20,
     },
