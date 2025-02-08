@@ -1,7 +1,9 @@
 // rnfe -> reactNativeFunctionalExportComponent
 import React from 'react';
-import { Dimensions, ImageBackground, Pressable, ScrollView , StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView , StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
 
 const { width, height } = Dimensions.get('window');
@@ -21,7 +23,10 @@ const mockRow2 = [
   ['Title2.5', `Which reloads 10 exercises (that were not just displayed)`],
 ];
 
-const App = () => {
+const Home = () => {
+  const theme = useColorScheme(); // get current theme
+  const themeStyles = getGlobalStyles(theme); // get theme-aware styles
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.displayContainer}>
@@ -50,7 +55,7 @@ const App = () => {
   )
 }
 
-export default App
+export default Home
 
 const styles = StyleSheet.create({
   mainContainer: {

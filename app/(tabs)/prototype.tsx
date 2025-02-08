@@ -1,34 +1,35 @@
 // when the theme changes, via the system or a user override, the Theme Context updates
 // this causes useThemedStyles to re-run, because its dependency, theme, changed, and the new (updated) styles are applied automatically
 
-import React from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import ThemedText from '@/components/ThemedText';
 import ThemedView from '@/components/ThemedView';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import ThemeSelectorModal from '@/components/sideMenu/ThemeSelectorModal';
 
-export default function Example() {
-  const styles = useThemedStyles(); // call useThemedStyles to obtain the dynamic style object based on the current theme
+export default function SettingsScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
   // these styles are used on its root View and child elements rather than declaring styles in this file
 
   return (
-    <ThemeProvider>
-      <ThemedView style={styles.container} >
-        <ThemedText type="title" style={styles.title}>This is a title</ThemedText>
-        <ThemedText type='default'>
-          This is default text that will be black in light mode and white in dark mode.
+    <ThemedView showDefaultBackgroundImage={false} >
+      <ThemedText type="title">This is a title</ThemedText>
+      <ThemedText type='default'>
+        This is default text that will be black in light mode and white in dark mode.
+      </ThemedText>
+      <View>
+        <ThemedText>
+          This box has a themed border.
         </ThemedText>
-        <View style={styles.box}>
-          <ThemedText style={styles.boxText}>
-            This box has a themed border.
-          </ThemedText>
-        </View>
-      </ThemedView>
-    </ThemeProvider>
+      </View>
+      
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <ThemedText>Change Theme</ThemedText>
+      </TouchableOpacity>
+      <ThemeSelectorModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    </ThemedView>
   );
 }
-
 
 // File Structure Recap:
 // constants/Colors.ts:

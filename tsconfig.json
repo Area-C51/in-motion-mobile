@@ -5,12 +5,14 @@
     "paths": {
       "@/*": ["./*"], // allows TypeScript to understand the @ symbol as a path alias for the root (or any other folder or folder within)
       "@/assets/*": ["./assets/*"] // additional path alias for @/assets/* to directly point to the assets folder to tell TypeScript how to resolve imports for assets
-    }
+    },
+    // "types": ["react", "react-native", "node"]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    // "node_modules/@types"
   ]
 }
