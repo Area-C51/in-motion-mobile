@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
-import ThemedText from '@/components/ThemedText';
+// import ThemedText from '@/components/ThemedText';
 import ThemedView from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
 import SettingsModal from '@/components/search/SettingsModal';
@@ -62,7 +62,7 @@ export default function Search() {
     setIsMenuVisible(prevState => !prevState);
   };
   
-  // fetch muscle and category options from backend
+  // fetch muscle and category options from back-end
   useEffect(() => {
     if (!fetchDropdownOptions) return;
     const fetchOptions = async () => {
@@ -145,7 +145,7 @@ export default function Search() {
     try {
       const query = new URLSearchParams(queryParams.searchEntry).toString();
 
-      const response = await fetch(`http://localhost:8080/api/aisearch?${query}`, { // fetch AI response from the backend
+      const response = await fetch(`http://localhost:8080/api/aisearch?${query}`, { // fetch AI response from the back-end
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -240,6 +240,5 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     paddingHorizontal: 20,
-    // paddingRight: 10,
   },
 })

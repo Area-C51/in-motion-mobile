@@ -4,15 +4,16 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { useTheme } from '@/contexts/ThemeProvider';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
-import ThemedView from '@/components/ThemedView';
 import RadioButton from '@/components/sideMenu/RadioButton';
 
 const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
+  // for updating the theme
   const { theme, setTheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState(theme);
 
-  const effectiveTheme = useColorScheme(); // get the effective theme (either "light" or "dark")
-  const tStyles = getGlobalStyles(effectiveTheme); // get theme-aware styles
+  // for using the theme specific styles
+  const currentTheme = useColorScheme(); // get the current theme
+  const tStyles = getGlobalStyles(currentTheme); // get theme specific styles
 
   const handleSelection = (newTheme: 'light' | 'dark' | 'system') => {
     setSelectedTheme(newTheme);
@@ -43,11 +44,6 @@ const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: (
                 selected={selectedTheme === theme}
                 onPress={() => handleSelection(theme as any)}
               />
-              // <TouchableOpacity key={theme} style={styles.option} onPress={() => handleSelection(theme as any)}>
-              //   <ThemedText style={[styles.optionText, selectedTheme === theme && styles.selected]}>
-              //     {theme.charAt(0).toUpperCase() + theme.slice(1)}
-              //   </ThemedText>
-              // </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -57,21 +53,17 @@ const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: (
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modalContainer: { // can be centralized to GlobalStyles if used elsewhere
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  modalContent: {
+  modalContent: { // can be centralized to GlobalStyles if used elsewhere
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     width: '50%',
     alignItems: 'flex-start'
-  },
-  selected: {
-    fontWeight: 'bold',
-    color: 'blue'
   },
 });
 

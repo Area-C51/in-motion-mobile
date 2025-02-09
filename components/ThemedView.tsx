@@ -27,14 +27,19 @@ export default function ThemedView({
 }: ThemedViewProps) {
   // useThemeColor hook looks at the current theme (usually via useColorScheme or via a context and uses passed in override values, e.g., a provided lightColor or darkColor prop, or the default color value for the key 'background' in the Colors object, using the current theme
   // if the system is in dark mode, it returns Colors.dark.background; if in light mode, it returns Colors.light.background
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    'background'
+  );
+
+  const defaultImage = defaultBackgroundImage || require('@/assets/images/in-motion-orangegold-icon.png');
 
   if (showDefaultBackgroundImage) {
     return (
       <View style={[{ flex: 1, backgroundColor }, style]} {...otherProps}>
         <ImageBackground
           // shows the backgroundColor with the image by default, conditional check is within each screen
-          source={defaultBackgroundImage || require('@/assets/images/in-motion-orangegold-icon.png')}
+          source={defaultImage}
           style={styles.backgroundContainer}
           {...otherProps}
         >
@@ -45,7 +50,7 @@ export default function ThemedView({
   }
 
   return (
-    <View style={[{ backgroundColor }, style]} {...otherProps}>
+    <View style={[{ flex: 1, backgroundColor }, style]} {...otherProps}>
       {children}
     </View>
   );

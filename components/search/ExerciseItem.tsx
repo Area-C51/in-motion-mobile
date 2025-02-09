@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 
 // interface to define types for the Exercise object
 export interface Exercise {
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
   },
   exerciseImage: {
     aspectRatio: 1,
-    borderRadius: 10,
+    borderRadius: 20,
   },
   
   // Exercise Expanded

@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   animatedContainer: {
     flex: 1,
   },
-  modalBackground: {
+  modalBackground: { // local specific modal style
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     alignItems: 'center',

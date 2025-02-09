@@ -1,3 +1,8 @@
+// sets up a context provider to manage and store the app's theme preference (light, dark, or system) using React's Context API (ThemeProvider)
+// the context allows components throughout the app to access and modify the current theme (ThemeContext)
+// also persists the theme preference across app sessions using AsyncStorage
+// allows theme management via ThemeProvider and useTheme hook to globally access and modify the theme
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -8,18 +13,21 @@ interface ThemeContextProps {
   setTheme: (theme: Theme) => void;
 }
 
-export const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextProps | undefined>(undefined); // uses createContext function to create a ThemeContext, which holds the current theme ('light', 'dark', or 'system') and a method to update it (setTheme)
+// initially set to undefined, later used with a provider (ThemeProvider)
 
+// ThemeProvider, a React component that uses the context to provide the theme and a method to update it to all child components
+// it’s wrapped around the root of the app (or parts of it), /app/_layout.tsx, to make the theme and its setter globally accessible
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('system');
+  const [theme, setTheme] = useState<Theme>('system'); // holds the theme state with useState, default to 'system' theme setting
 
-  // load theme from AsyncStorage when the app starts
+  // load theme from local storage (AsyncStorage) when the app starts
   useEffect(() => {
     const loadTheme = async () => {
       try{
         const storedTheme = await AsyncStorage.getItem('app-theme');
-        console.log("Loaded theme from storage:", storedTheme);
-        if (storedTheme) setTheme(storedTheme as Theme);
+        // console.log("Loaded theme from storage:", storedTheme); // for debugging
+        if (storedTheme) setTheme(storedTheme as Theme); // if no storedTheme, theme remains as default of 'system'
       } catch (error) {
         console.error('Failed to load theme preference', error);
       }
@@ -27,17 +35,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     loadTheme();
   }, []);
 
-  // save theme preference when updated
+  // update/save current theme in both state and AsyncStorage, allows preference to persist between app sessions
   const updateTheme = async (newTheme: Theme) => {
     try {
       await AsyncStorage.setItem('app-theme', newTheme);
       setTheme(newTheme);
-      console.log("Updated theme:", newTheme);
+      // console.log("Updated theme:", newTheme); // for debugging
     } catch (error) {
       console.error('Failed to save theme preference', error);
     }
   };
 
+  // with ThemeContext.Provider, ThemeProvider wraps its children, allows child components access to the current theme and the setTheme function via the context
   return (
     <ThemeContext.Provider value={{ theme, setTheme: updateTheme }}>
       {children}
@@ -45,8 +54,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
+// useTheme hook allows other components to access the current theme and the function to update it
 export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error('useTheme must be used within ThemeProvider');
+  const context = useContext(ThemeContext); // useContext hook to access ThemeContext and return its value (the current theme and the setTheme function)
+  if (!context) throw new Error('useTheme must be used within ThemeProvider'); // if this hook is used outside ThemeProvider (i.e., without being wrapped in the provider), it will throw an error; ensures it’s only used in components that are descendants of ThemeProvider
   return context;
 };

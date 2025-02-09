@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Modal, Platform, StyleSheet, Switch, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Animated, Modal, Platform, StyleSheet, Switch, TouchableWithoutFeedback, View } from 'react-native';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles as gStyles, SwitchColors } from '@/constants/GlobalStyles';
+import ThemedText from '@/components/ThemedText';
 
 interface SettingsModalProps {
   isMenuVisible: boolean;
@@ -18,6 +21,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   aiEnabled,
   setAiEnabled,
 }) => {
+  const theme = useColorScheme();
+  const tStyles = getGlobalStyles(theme);
   const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
   
   useEffect(() => {
@@ -45,7 +50,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
           <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()} accessible={false}>
             <Animated.View
-              style={[styles.searchModalContainer, { transform: [{ translateX: slideAnim }] }]}
+              style={[styles.searchModal, tStyles.menu, { transform: [{ translateX: slideAnim }] }]}
               accessibilityLabel="Search Settings Options"
               accessible={true}
               focusable={true}
@@ -53,13 +58,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Toggle for Dropdown Search */}
               <View style={styles.switchContainer}>
-                <Text style={styles.searchModalText} accessibilityLabel="Dropdown search toggle label">
+                <ThemedText type={'text'} accessibilityLabel="Dropdown search toggle label">
                   Dropdowns
-                </Text>
+                </ThemedText>
                 <Switch
                   style={styles.searchSwitch}
                   value={dropdownsEnabled}
                   onValueChange={setDropdownsEnabled}
+                  // thumbColor={dropdownsEnabled ? SwitchColors.thumbOn : SwitchColors.thumbOff}
+                  // trackColor={{ false: SwitchColors.trackOff, true: SwitchColors.trackOn }}
                   accessibilityLabel="Toggle dropdown search"
                   accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} dropdown search options`}
                 />
@@ -67,15 +74,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Toggle for AI Search */}
               <View style={styles.switchContainer}>
-                <Text style={styles.searchModalText} accessibilityLabel="AI search toggle label">
+                <ThemedText type={'text'} accessibilityLabel="AI search toggle label">
                   AI Search
-                </Text>
+                </ThemedText>
                 <Switch
                   style={styles.searchSwitch}
                   value={aiEnabled}
                   onValueChange={setAiEnabled}
-                  // thumbColor={aiEnabled ? 'rgb(0, 0, 0)' : 'rgb(245, 245, 245)'} // can change the switch color for on/off
-                  // trackColor={{ false: '#767577', true: '#34C759' }} // can change the track color for on/off
+                  // thumbColor={aiEnabled ? SwitchColors.thumbOn : SwitchColors.thumbOff}
+                  // trackColor={{ false: SwitchColors.trackOff, true: SwitchColors.trackOn }}
                   accessibilityLabel="Toggle AI search"
                   accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} AI-assisted search`}
                 />
@@ -89,21 +96,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modalContainer: { // local specific modal style
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'flex-end',
   },
-  searchModalContainer: {
+  searchModal: {
     position: 'absolute',
     top: Platform.OS === 'web' ? 80 : 50,
     width: Platform.OS === 'web' ? 180 : 150,
-    borderRadius: 10,
+    borderRadius: 15,
     padding: Platform.OS === 'web' ? 10 : 0,
     paddingVertical: Platform.OS === 'web' ? 10 : 5,
     paddingLeft: Platform.OS === 'web' ? 15 : 15,
     paddingRight: Platform.OS === 'web' ? 15 : 5,
-    backgroundColor: '#FFF',
     shadowColor: Platform.OS === 'web' ? '#000' : 'transparent',
     shadowOffset: Platform.OS === 'web' ? { width: 0, height: 2 } : undefined,
     shadowOpacity: Platform.OS === 'web' ? 0.8 : undefined,
@@ -117,9 +123,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: Platform.OS === 'web' ? 10 : -3,
-  },
-  searchModalText: {
-    fontSize: 16,
   },
   searchSwitch: {
   },

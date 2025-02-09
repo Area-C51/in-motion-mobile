@@ -3,6 +3,13 @@ import { Colors } from '@/constants/Colors'
 
 const { width, height } = Dimensions.get('window');
 
+export const SwitchColors = { // may not be used due to lack of uniformity across platforms
+  thumbOn: 'rgb(48, 96, 215)', // Colors 'detail'
+  thumbOff: 'rgb(242, 242, 242)',
+  trackOn: 'rgb(0, 175, 255)', // Colors 'detail2'
+  trackOff: 'rgb(174, 174, 174)',
+};
+
 export const GlobalStyles = StyleSheet.create({
   // Layout
   mainContainer: {
@@ -12,7 +19,6 @@ export const GlobalStyles = StyleSheet.create({
     flex: 1,
     top: 35, // space for the status bar on mobile
   },
-
 
   displayRow: {
     flexDirection: 'row',

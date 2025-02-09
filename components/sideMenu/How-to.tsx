@@ -1,6 +1,5 @@
 import { Image, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
-
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import ThemedText from '@/components/ThemedText';
@@ -25,7 +24,7 @@ export default function HowTo() {
         <ThemedText>
           Search for exercises to find matches in the
           <Link href='/search'>
-            <ThemedText style={styles.linkFont} type="defaultSemiBold"> "Search" </ThemedText>
+            <ThemedText style={styles.linkFont} type="subtitle"> "Search" </ThemedText>
           </Link>
           tab, then tap any image to view it in full or use the button below to see more details. {'\n'}{'\n'}
           Looking for more specific results? Check out the search settings menu for more options or explore the AI assisted search!
@@ -47,7 +46,7 @@ export default function HowTo() {
           Want to build custom workouts? By creating an account, you can design your own workouts and add any exercises you discover. {'\n'}{'\n'}
           Your most recent workouts will be available right on the home screen, or you can access all them from the
           <Link href='/search'>
-            <ThemedText style={styles.linkFont} type="defaultSemiBold"> "Workouts" </ThemedText>
+            <ThemedText style={styles.linkFont} type="subtitle"> "Workouts" </ThemedText>
           </Link>
           tab. From there, easily edit or remove exercises, or even delete entire workouts.
         </ThemedText>

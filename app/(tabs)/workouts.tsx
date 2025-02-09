@@ -11,8 +11,7 @@ const minScreenDimension = Math.min(width, height);
 export default function Workout() {
   return (
     <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
-      style={gStyles.mainContainer}
-    >
+      style={gStyles.mainContainer}    >
       <View style={gStyles.contentContainer}>
         <View style={styles.workoutsContainer}>
           <Text style={[styles.text, {fontWeight: 800}]}>Where workouts go to workout</Text>

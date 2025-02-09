@@ -16,7 +16,7 @@ const __dirname = dirname(__filename); // gets the directory name of the current
 // const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLIC_ANON_KEY) // initialize Supabase client
 
 const allowedOrigin = process.env.NODE_ENV === 'production' ? 'http://localhost:8081' /* https://your-production-domain.com' */ : '*'; // set up CORS based on environment, production vs development URL
-app.use(cors({ origin: allowedOrigin })); // allows frontend to make requests to the backend (CORS middleware)
+app.use(cors({ origin: allowedOrigin })); // allows front-end to make requests to the back-end (CORS middleware)
 app.use(express.json()); // parses incoming JSON requests/bodies/payloads
 
 app.use('/api', exerciseRoutes); // default for requests with /api endpoint to use exerciseRoutes
@@ -50,6 +50,6 @@ app.use((err, req, res, next) => { // global error handling middleware
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(PORT, '0.0.0.0', () => { // start server, currently listens to PORT as well as on all available network interfaces
+app.listen(PORT, '0.0.0.0', () => { // start server, currently listens to PORT, also on all available network interfaces
   console.log(`server listening on port ${PORT}`)
 });
