@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useTheme } from '@/contexts/ThemeProvider';
+import { useThemeUpdate } from '@/hooks/useThemeUpdate';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import ThemedText from '@/components/ThemedText';
 import RadioButton from '@/components/sideMenu/RadioButton';
 
 const ThemeSelectorModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   // for updating the theme
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useThemeUpdate();
   const [selectedTheme, setSelectedTheme] = useState(theme);
 
   // for using the theme specific styles

@@ -1,7 +1,6 @@
 // sets up a context provider to manage and store the app's theme preference (light, dark, or system) using React's Context API (ThemeProvider)
-// the context allows components throughout the app to access and modify the current theme (ThemeContext)
+// the context allows components throughout the app to access the current theme (ThemeContext)
 // also persists the theme preference across app sessions using AsyncStorage
-// allows theme management via ThemeProvider and useTheme hook to globally access and modify the theme
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -46,17 +45,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  // with ThemeContext.Provider, ThemeProvider wraps its children, allows child components access to the current theme and the setTheme function via the context
+  // with ThemeContext.Provider, ThemeProvider wraps its children, allows child components access to the current theme
   return (
     <ThemeContext.Provider value={{ theme, setTheme: updateTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-};
-
-// useTheme hook allows other components to access the current theme and the function to update it
-export const useTheme = () => {
-  const context = useContext(ThemeContext); // useContext hook to access ThemeContext and return its value (the current theme and the setTheme function)
-  if (!context) throw new Error('useTheme must be used within ThemeProvider'); // if this hook is used outside ThemeProvider (i.e., without being wrapped in the provider), it will throw an error; ensures it’s only used in components that are descendants of ThemeProvider
-  return context;
 };

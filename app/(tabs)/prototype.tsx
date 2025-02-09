@@ -15,8 +15,8 @@ export default function SettingsScreen() {
 
   return (
     <ThemedView showDefaultBackgroundImage={false} >
-      <ThemedText type="title">This is a title</ThemedText>
-      <ThemedText type='default'>
+      <ThemedText type='title'>This is a title</ThemedText>
+      <ThemedText type='subtitle'>
         This is default text that will be black in light mode and white in dark mode.
       </ThemedText>
       <View>

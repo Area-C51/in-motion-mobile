@@ -36,7 +36,73 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start --tunnel 
    ```
    
-### Notes
+## App Structure and Data Flow
+
+### Themes - Light/Dark Modes
+
+1. [ThemeProvider.tsx](./contexts/ThemeProvider.tsx)
+
+   * The `ThemeProvider` component manages the app’s theme context (`light`, `dark`, or `system`).
+   
+   * Uses `AsyncStorage` to persist the theme context selection across app sessions, allowing the user’s theme preference to be retained.
+   
+   * The `ThemeContext` holds the current theme context and provides access to this context to all child components through `ThemeContext.Provider`.
+
+2. [Colors.ts](./constants/Colors.ts)
+   
+   * Defines the color palette for both light and dark themes, centralizing color management.
+
+3. [useColorScheme.ts](./hooks/useColorScheme.ts) and [useColorScheme.web.ts](./hooks/useColorScheme.web.ts)
+
+   * Custom hook that returns the active theme (light, dark, or system) based on the `ThemeProvider` context.
+
+   * `useColorScheme.web.ts` specifically handles hydration for web platforms, ensuring the theme is correctly initialized.
+
+4. [useThemeColor.ts](./hooks/useThemeColor.ts)
+
+   * Custom hook that returns the appropriate color for a given type (e.g., header, title, background) based on the active theme from `useColorScheme`.
+
+   * Uses the `Colors` palette for the active theme.
+
+5. [ThemedText.tsx](./components/ThemedText.tsx)
+
+   * Wraps the standard `<Text />` component and applies a color based on the active theme from `useThemeColor`.
+
+   * Provides centralized styles for text elements.
+
+6. [ThemedView.tsx](./components/ThemedView.tsx)
+
+   * Wraps the standard `<View />` component and applies a background color based on the active theme from `useThemeColor`.
+   
+   * Also allows for the inclusion of background images.
+
+7. [GlobalStyles](./constants/GlobalStyles.ts)
+
+   * Contains centralized static styles (e.g., `mainContainer`, `contentContainer`) and dynamic themed styles based on the `Colors` palette for each theme type.
+
+8. [useThemeUpdate](./hooks/useThemeUpdate.ts)
+
+   * Custom hook that allows descendant components of `ThemeProvider` to update the theme context.
+   
+   * Supports dynamic theme updates, allowing for changes to themed styles, elements, and components.
+
+9. [ThemeSelectorModal](./components/sideMenu/ThemeSelectorModal.tsx)
+
+   * A modal component used to allow users to select and update the theme preference.
+
+   * Uses `useThemeUpdate` to update the theme context dynamically.
+
+10. All other components
+
+   * Can import:
+
+      1. The current theme from `useColorScheme`.
+      
+      2. Themed text and view components from `ThemedText` and `ThemedView`.
+
+      3. Static and dynamic styles from `GlobalStyles`.
+
+<!-- ### Notes
 
 In the output, you'll find options to open the app in a
 
@@ -69,4 +135,4 @@ To learn more about developing your project with Expo, look at the following res
 Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions. -->

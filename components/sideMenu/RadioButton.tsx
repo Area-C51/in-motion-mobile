@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useTheme } from '@/contexts/ThemeProvider';
+import { useThemeUpdate } from '@/hooks/useThemeUpdate';
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import ThemedText from '@/components/ThemedText';
@@ -16,7 +16,7 @@ interface RadioButtonProps {
 const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onPress }) => {
   const theme = useColorScheme(); // Get the current theme
   const themeColors = Colors[theme]; // Get the theme-specific colors
-  // const { theme } = useTheme();
+  // const { theme } = useThemeUpdate();
 
   return (
     <Pressable onPress={() => onPress(value)} style={styles.container}>

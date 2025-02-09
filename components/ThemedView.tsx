@@ -1,4 +1,4 @@
-// wraps a regular View and applies a background color based on the current theme
+// wraps a standard View element and applies a background color based on the current theme
 
 import React from 'react';
 import { Dimensions, ImageBackground, ImageSourcePropType, StyleSheet, View, type ViewProps } from 'react-native';
