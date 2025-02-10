@@ -2,7 +2,7 @@
 // the context allows components throughout the app to access the current theme (ThemeContext)
 // also persists the theme preference across app sessions using AsyncStorage
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { ActivityIndicator, Image, useColorScheme as useSystemColorScheme, View  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '@/constants/Colors';
@@ -52,13 +52,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // show splash screen while loading theme
   if (theme === null) {
-    const backgroundColor = systemTheme === 'light' ? Colors.light.background : Colors.dark.background;
-    const logo = systemTheme === 'light' ? require('@/assets/in-motion-blue-icon.png') : require('@/assets/in-motion-red-icon.png'); // Ensure logo assets exist
+    const backgroundColor = systemTheme === 'dark' ? Colors.dark.background : Colors.light.background;
+    const logo = systemTheme === 'dark' ? require('@/assets/images/in-motion-white-icon.png') : require('@/assets/images/in-motion-black-icon.png');
 
     return (
       <View style={{ flex: 1, backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
         <Image source={logo} style={{ width: 200, height: 200 }} resizeMode="contain" />
-        <ActivityIndicator size="large" color={systemTheme === 'dark' ? '#fff' : '#000'} />
+        <ActivityIndicator size="large" color={systemTheme === 'dark' ? Colors.dark.background : Colors.light.background} />
       </View>
     );
   }

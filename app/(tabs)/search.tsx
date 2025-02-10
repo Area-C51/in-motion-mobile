@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
-// import { ThemedText } from '@/components/ThemedText';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
 import SettingsModal from '@/components/search/SettingsModal';
@@ -179,9 +179,7 @@ function Search() {
       // setSearchEntry(''); // resets search box to an empty string after each search
     } catch (error) {
       console.error('Error: ', error);
-      Alert.alert(
-        'Something went wrong with the AI assisted query. Please try again.'
-      );
+      Alert.alert('Something went wrong with the AI assisted query. Please try again.');
     } finally {
       setLoading(false); // stop loading when done
     }
@@ -199,7 +197,7 @@ function Search() {
   );
 
   return (
-    // ThemedView is now the mainContainer <View>, it returns a View with a background image element and any children element
+    // ThemedView returns a View with a background image if there are no search results
     <ThemedView
       showDefaultBackgroundImage={!responseResults.length}
       style={gStyles.mainContainer}
@@ -233,16 +231,16 @@ function Search() {
         {/* Results container displays exercice items if present */}
         <View style={styles.resultsContainer}>
           {loading && <ActivityIndicator size='large' color='#0000ff' />}
-          {responseResults.length > 0 ? ( // if there is 1 or more results in the responseResults array
+          {responseResults.length > 0 ? ( // if there are any search results
             <FlatList
               data={responseResults}
               renderItem={renderExerciseItem}
               keyExtractor={(item) => item.id}
             />
           ) : (
-            <Text style={tStyles.placeholder}>
+            <ThemedText type='header' style={tStyles.placeholder}>
               Please search for an exercise
-            </Text>
+            </ThemedText>
           )}
         </View>
       </View>
@@ -251,7 +249,7 @@ function Search() {
       <ImageModal
         selectedImage={selectedImage}
         setSelectedImage={setSelectedImage}
-        fadeDuration={100} // Customize the fade duration to 500ms (or any value you prefer)
+        fadeDuration={100} // customize the fade duration
       />
     </ThemedView>
   );
@@ -260,7 +258,6 @@ function Search() {
 export default Search;
 
 const styles = StyleSheet.create({
-  // Results List
   resultsContainer: {
     flex: 1,
     position: 'relative',

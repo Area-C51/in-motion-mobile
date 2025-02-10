@@ -44,67 +44,65 @@
 
 1. [ThemeProvider.tsx](./contexts/ThemeProvider.tsx)
 
-   - The `ThemeProvider` component manages the app’s theme context (`light`, `dark`, or `system`).
-
-   - Uses `AsyncStorage` to persist the theme context selection across app sessions, allowing the user’s theme preference to be retained.
-
-   - Shows a splash screen based on system theme while loading the active app theme to avoid unnecessary re-renders
-
-   - The `ThemeContext` holds the current theme context and provides access to this context to all child components through `ThemeContext.Provider`.
+   * The `ThemeProvider` component manages the app’s theme context (`light`, `dark`, or `system`).
+   
+   * Uses `AsyncStorage` to persist the theme context selection across app sessions, allowing the user’s theme preference to be retained.
+   
+   * Shows a splash screen based on system theme while loading the active app theme to avoid unnecessary re-renders
+   
+   * The `ThemeContext` holds the current theme context and provides access to this context to all child components through `ThemeContext.Provider`.
 
 2. [Colors.ts](./constants/Colors.ts)
 
-   - Defines the color palette for both light and dark themes, centralizing color management.
+   * Defines the color palette for both light and dark themes, centralizing color management.
 
 3. [useColorScheme.ts](./hooks/useColorScheme.ts) and [useColorScheme.web.ts](./hooks/useColorScheme.web.ts)
 
-   - Custom hook that returns the active theme (light, dark, or system) based on the `ThemeProvider` context.
-
-   - `useColorScheme.web.ts` specifically handles hydration for web platforms, ensuring the theme is correctly initialized.
+   * Custom hook that returns the active theme (light, dark, or system) based on the `ThemeProvider` context.
+   
+   * `useColorScheme.web.ts` specifically handles hydration for web platforms, ensuring the theme is correctly initialized.
 
 4. [useThemeColor.ts](./hooks/useThemeColor.ts)
 
-   - Custom hook that returns the appropriate color for a given type (e.g., header, title, background) based on the active theme from `useColorScheme`.
-
-   - Uses the `Colors` palette for the active theme.
+   * Custom hook that returns the appropriate color for a given type (e.g., header, title, background) based on the active theme from `useColorScheme`.
+   
+   * Uses the `Colors` palette for the active theme.
 
 5. [ThemedText.tsx](./components/ThemedText.tsx)
 
-   - Wraps the standard `<Text />` component and applies a color based on the active theme from `useThemeColor`.
-
-   - Provides centralized styles for text elements.
+   * Wraps the standard `<Text />` component and applies a color based on the active theme from `useThemeColor`.
+   
+   * Provides centralized styles for text elements.
 
 6. [ThemedView.tsx](./components/ThemedView.tsx)
 
-   - Wraps the standard `<View />` component and applies a background color based on the active theme from `useThemeColor`.
-
-   - Also allows for the inclusion of background images.
+   * Wraps the standard `<View />` component and applies a background color based on the active theme from `useThemeColor`.
+   
+   * Also allows for the inclusion of background images.
 
 7. [GlobalStyles](./constants/GlobalStyles.ts)
 
-   - Contains centralized static styles (e.g., `mainContainer`, `contentContainer`) and dynamic themed styles based on the `Colors` palette for each theme type.
+   * Contains centralized static styles (e.g., `mainContainer`, `contentContainer`) and dynamic themed styles based on the `Colors` palette for each theme type.
 
 8. [useTheme](./hooks/useTheme.ts)
 
-   - Custom hook that allows descendant components of `ThemeProvider` to update the theme context.
-
-   - Supports dynamic theme updates, allowing for changes to themed styles, elements, and components.
+   * Custom hook that allows descendant components of `ThemeProvider` to update the theme context.
+   
+   * Supports dynamic theme updates, allowing for changes to themed styles, elements, and components.
 
 9. [ThemeSelectorModal](./components/sideMenu/ThemeSelectorModal.tsx)
 
-   - A modal component used to allow users to select and update the theme preference.
+   * A modal component used to allow users to select and update the theme preference.
+   
+   * Uses `useTheme` to update the theme context dynamically.
 
-   - Uses `useTheme` to update the theme context dynamically.
+0. All other components can import
 
-10. All other components
+   * The current theme from `useColorScheme`.
 
-- Can import:
+   * Themed text and view components from `ThemedText` and `ThemedView`.
 
-  1. The current theme from `useColorScheme`.
-
-  2. Themed text and view components from `ThemedText` and `ThemedView`.
-
-  3. Static and dynamic styles from `GlobalStyles`.
+   * Static and dynamic styles from `GlobalStyles`.
 
 ### Back-end
 
