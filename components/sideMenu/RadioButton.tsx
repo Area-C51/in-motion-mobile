@@ -1,10 +1,10 @@
 import React from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useThemeUpdate } from '@/hooks/useThemeUpdate';
+import { useTheme } from '@/hooks/useTheme';
 // import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
-import ThemedText from '@/components/ThemedText';
+import { ThemedText } from '@/components/ThemedText';
 
 interface RadioButtonProps {
   label: string;
@@ -13,20 +13,31 @@ interface RadioButtonProps {
   onPress: (value: string) => void;
 }
 
-const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onPress }) => {
+const RadioButton: React.FC<RadioButtonProps> = ({
+  label,
+  value,
+  selected,
+  onPress,
+}) => {
   const theme = useColorScheme(); // Get the current theme
   const themeColors = Colors[theme]; // Get the theme-specific colors
-  // const { theme } = useThemeUpdate();
+  // const { theme } = useTheme();
 
   return (
     <Pressable onPress={() => onPress(value)} style={styles.container}>
       {/* Label */}
-      <ThemedText type="text" style={styles.label}>{label}</ThemedText>
+      <ThemedText type='text' style={styles.label}>
+        {label}
+      </ThemedText>
       {/* <ThemedText style={[styles.label, { color: themeColors.text }]}>{label}</ThemedText> */}
       {/* Outer Circle */}
       <View style={[styles.outerCircle, { borderColor: themeColors.tint }]}>
         {/* Inner Circle (only visible if selected) */}
-        {selected && <View style={[styles.innerCircle, { backgroundColor: themeColors.tint }]} />}
+        {selected && (
+          <View
+            style={[styles.innerCircle, { backgroundColor: themeColors.tint }]}
+          />
+        )}
       </View>
     </Pressable>
   );

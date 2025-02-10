@@ -30,7 +30,7 @@
           "image": "./assets/images/in-motion-black-icon.png",
           "imageWidth": 200,
           "resizeMode": "cover",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "hsl(0, 0.00%, 98.00%)" // "#ffffff"
         }
       ]
     ],

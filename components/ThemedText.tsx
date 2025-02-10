@@ -21,7 +21,7 @@ export type ThemedTextProps = TextProps & {
 //   detail: { light: Colors.light.detail, dark: Colors.dark.detail },
 // };
 
-export default function ThemedText({
+export function ThemedText({
   style,
   // lightColor, // allow for user provided custom light and dark colors, depracated
   // darkColor,

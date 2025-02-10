@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
-// import ThemedText from '@/components/ThemedText';
-import ThemedView from '@/components/ThemedView';
+// import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
 import SettingsModal from '@/components/search/SettingsModal';
 import ExerciseItem, { Exercise } from '@/components/search/ExerciseItem';
@@ -33,9 +33,9 @@ const scaleFontSize = (size: number) => {
 //   fontSize: scaleFontSize(16), // Scale text size based on screen width
 // },
 
-export default function Search() {
+function Search() {
   const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allows dynamic colors, possible use with themes
-  
+
   const [muscleOptions, setMuscleOptions] = useState([]); // state for muscle options
   const [categoryOptions, setCategoryOptions] = useState([]); // state for category options
   const [fetchDropdownOptions, setFetchDropdownOptions] = useState(true); // status flag to ensure dropdown options data only occurs once
@@ -47,7 +47,9 @@ export default function Search() {
   const [responseResults, setResponseResults] = useState<Exercise[]>([]); // sets state for responseResults, db results from back-end
   const [aiResponse, setAIResponse] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // state for the selected image to expand
-  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null); // state to track expanded exercise on click
+  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(
+    null
+  ); // state to track expanded exercise on click
 
   const [loading, setLoading] = useState(false);
 
@@ -59,20 +61,26 @@ export default function Search() {
   const tStyles = getGlobalStyles(theme);
 
   const toggleSearchModal = () => {
-    setIsMenuVisible(prevState => !prevState);
+    setIsMenuVisible((prevState) => !prevState);
   };
-  
+
   // fetch muscle and category options from back-end
   useEffect(() => {
     if (!fetchDropdownOptions) return;
     const fetchOptions = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/dropdown-options');
+        const response = await fetch(
+          'http://localhost:8080/api/dropdown-options'
+        );
         if (!response.ok) throw new Error('Failed to fetch options');
         const { muscles, categories } = await response.json();
-        
-        setMuscleOptions(muscles.sort((a: string, b: string) => a.localeCompare(b))); // sort and set retrieved muscle options
-        setCategoryOptions(categories.sort((a: string, b: string) => a.localeCompare(b))); // sort and set retrieved category options
+
+        setMuscleOptions(
+          muscles.sort((a: string, b: string) => a.localeCompare(b))
+        ); // sort and set retrieved muscle options
+        setCategoryOptions(
+          categories.sort((a: string, b: string) => a.localeCompare(b))
+        ); // sort and set retrieved category options
         setFetchDropdownOptions(false); // set status flag to false after fetching data once
       } catch (error) {
         console.error('Error fetching options:', error);
@@ -95,23 +103,27 @@ export default function Search() {
       searchTerm: searchEntry.trim() || '', // get the search term
     };
   };
-  
-  const exerciseSearch = async () => { // basic exercise search functionality
+
+  const exerciseSearch = async () => {
+    // basic exercise search functionality
     const { searchTerm } = getSearchInputs();
     const queryParams: QueryParams = {};
-    
+
     // only add the parameters that exist
     if (searchTerm) queryParams.id = searchTerm;
     if (muscle) queryParams.muscle = muscle;
     if (category) queryParams.category = category;
 
-    if (Object.keys(queryParams).length === 0) { // if no filter or search term is provided, show an alert and stop the search
+    if (Object.keys(queryParams).length === 0) {
+      // if no filter or search term is provided, show an alert and stop the search
       Alert.alert('Please enter a search term or select a filter');
       return;
     }
 
     try {
-      const query = new URLSearchParams(queryParams as Record<string, string>).toString(); // construct the query string using URLSearchParams directly from queryParams
+      const query = new URLSearchParams(
+        queryParams as Record<string, string>
+      ).toString(); // construct the query string using URLSearchParams directly from queryParams
       // console.log(query); // for debugging
       const response = await fetch(`http://localhost:8080/api/search?${query}`);
       // console.log(response); // for debugging
@@ -125,7 +137,8 @@ export default function Search() {
     }
   };
 
-  const aiExerciseSearch = async () => { // AI-assisted exercise search functionality
+  const aiExerciseSearch = async () => {
+    // AI-assisted exercise search functionality
     const { searchTerm } = getSearchInputs();
     const queryParams: QueryParams = {}; // initial queryParams object
 
@@ -134,27 +147,31 @@ export default function Search() {
     // if (muscle) queryParams.muscle = muscle;
     // if (category) queryParams.category = category;
 
-    console.log('aiExerciseSearch queryParams: ', queryParams)
+    console.log('aiExerciseSearch queryParams: ', queryParams);
     if (!searchTerm) {
       Alert.alert('Please enter a search.');
       return;
     }
     setLoading(true); // start loading
     // setError(''); // reset any previous errors
-  
+
     try {
       const query = new URLSearchParams(queryParams.searchEntry).toString();
 
-      const response = await fetch(`http://localhost:8080/api/aisearch?${query}`, { // fetch AI response from the back-end
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          searchEntry: searchTerm,
-          // id: searchTerm,
-          // muscle,
-          // category
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/aisearch?${query}`,
+        {
+          // fetch AI response from the back-end
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            searchEntry: searchTerm,
+            // id: searchTerm,
+            // muscle,
+            // category
+          }),
+        }
+      );
 
       if (!response.ok) throw new Error('Failed to fetch data from the server');
       const data = await response.json();
@@ -162,7 +179,9 @@ export default function Search() {
       // setSearchEntry(''); // resets search box to an empty string after each search
     } catch (error) {
       console.error('Error: ', error);
-      Alert.alert('Something went wrong with the AI assisted query. Please try again.');
+      Alert.alert(
+        'Something went wrong with the AI assisted query. Please try again.'
+      );
     } finally {
       setLoading(false); // stop loading when done
     }
@@ -178,10 +197,13 @@ export default function Search() {
       setSelectedImage={setSelectedImage}
     />
   );
-  
+
   return (
     // ThemedView is now the mainContainer <View>, it returns a View with a background image element and any children element
-    <ThemedView showDefaultBackgroundImage={!responseResults.length} style={gStyles.mainContainer}>
+    <ThemedView
+      showDefaultBackgroundImage={!responseResults.length}
+      style={gStyles.mainContainer}
+    >
       <View style={gStyles.contentContainer}>
         <SearchBar
           searchEntry={searchEntry}
@@ -210,7 +232,7 @@ export default function Search() {
 
         {/* Results container displays exercice items if present */}
         <View style={styles.resultsContainer}>
-          {loading && <ActivityIndicator size="large" color="#0000ff" />}
+          {loading && <ActivityIndicator size='large' color='#0000ff' />}
           {responseResults.length > 0 ? ( // if there is 1 or more results in the responseResults array
             <FlatList
               data={responseResults}
@@ -218,7 +240,9 @@ export default function Search() {
               keyExtractor={(item) => item.id}
             />
           ) : (
-            <Text style={tStyles.placeholder}>Please search for an exercise</Text>
+            <Text style={tStyles.placeholder}>
+              Please search for an exercise
+            </Text>
           )}
         </View>
       </View>
@@ -231,7 +255,9 @@ export default function Search() {
       />
     </ThemedView>
   );
-};
+}
+
+export default Search;
 
 const styles = StyleSheet.create({
   // Results List
@@ -241,4 +267,4 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 20,
   },
-})
+});

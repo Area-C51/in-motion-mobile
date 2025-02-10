@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Modal, Platform, StyleSheet, Switch, TouchableWithoutFeedback, View } from 'react-native';
+import { Animated, Modal, Platform, StyleSheet, Switch, TouchableWithoutFeedback,  View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles, SwitchColors } from '@/constants/GlobalStyles';
-import ThemedText from '@/components/ThemedText';
+import { ThemedText } from '@/components/ThemedText';
 
 interface SettingsModalProps {
   isMenuVisible: boolean;
@@ -24,7 +24,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const theme = useColorScheme();
   const tStyles = getGlobalStyles(theme);
   const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
-  
+
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: isMenuVisible ? 0 : 150, // slide to 0 (visible) or 150 (hidden)
@@ -35,30 +35,42 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <Modal
-      animationType="fade"
+      animationType='fade'
       transparent={true}
       visible={isMenuVisible}
       onRequestClose={toggleSearchModal} // allows closing modal with back button (Android)
-      accessibilityLabel="Search Settings Modal"
-      accessibilityHint="Modal containing additional search settings"
+      accessibilityLabel='Search Settings Modal'
+      accessibilityHint='Modal containing additional search settings'
       accessible={true}
       focusable={true}
     >
       {/* The first TouchableWithoutFeedback wraps the entire overlay (modalOverlay) and closes the modal when touched */}
-      <TouchableWithoutFeedback onPress={toggleSearchModal} accessibilityLabel="Close search settings">
+      <TouchableWithoutFeedback
+        onPress={toggleSearchModal}
+        accessibilityLabel='Close search settings'
+      >
         <View style={styles.modalContainer}>
           {/* The second TouchableWithoutFeedback wraps searchModalContainer, and onPress={(event) => event.stopPropagation()} prevents touch events from bubbling up to the parent TouchableWithoutFeedback, ensuring the modal stays open when interacting with its contents. */}
-          <TouchableWithoutFeedback onPress={(event) => event.stopPropagation()} accessible={false}>
+          <TouchableWithoutFeedback
+            onPress={(event) => event.stopPropagation()}
+            accessible={false}
+          >
             <Animated.View
-              style={[styles.searchModal, tStyles.menu, { transform: [{ translateX: slideAnim }] }]}
-              accessibilityLabel="Search Settings Options"
+              style={[
+                styles.searchModal,
+                tStyles.menu,
+                { transform: [{ translateX: slideAnim }] },
+              ]}
+              accessibilityLabel='Search Settings Options'
               accessible={true}
               focusable={true}
             >
-
               {/* Toggle for Dropdown Search */}
               <View style={styles.switchContainer}>
-                <ThemedText type={'text'} accessibilityLabel="Dropdown search toggle label">
+                <ThemedText
+                  type={'text'}
+                  accessibilityLabel='Dropdown search toggle label'
+                >
                   Dropdowns
                 </ThemedText>
                 <Switch
@@ -67,14 +79,19 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                   onValueChange={setDropdownsEnabled}
                   // thumbColor={dropdownsEnabled ? SwitchColors.thumbOn : SwitchColors.thumbOff}
                   // trackColor={{ false: SwitchColors.trackOff, true: SwitchColors.trackOn }}
-                  accessibilityLabel="Toggle dropdown search"
-                  accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} dropdown search options`}
+                  accessibilityLabel='Toggle dropdown search'
+                  accessibilityHint={`${
+                    dropdownsEnabled ? 'Disable' : 'Enable'
+                  } dropdown search options`}
                 />
               </View>
 
               {/* Toggle for AI Search */}
               <View style={styles.switchContainer}>
-                <ThemedText type={'text'} accessibilityLabel="AI search toggle label">
+                <ThemedText
+                  type={'text'}
+                  accessibilityLabel='AI search toggle label'
+                >
                   AI Search
                 </ThemedText>
                 <Switch
@@ -83,8 +100,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                   onValueChange={setAiEnabled}
                   // thumbColor={aiEnabled ? SwitchColors.thumbOn : SwitchColors.thumbOff}
                   // trackColor={{ false: SwitchColors.trackOff, true: SwitchColors.trackOn }}
-                  accessibilityLabel="Toggle AI search"
-                  accessibilityHint={`${dropdownsEnabled ? 'Disable' : 'Enable'} AI-assisted search`}
+                  accessibilityLabel='Toggle AI search'
+                  accessibilityHint={`${
+                    dropdownsEnabled ? 'Disable' : 'Enable'
+                  } AI-assisted search`}
                 />
               </View>
             </Animated.View>
@@ -96,7 +115,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  modalContainer: { // local specific modal style
+  modalContainer: {
+    // local specific modal style
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'flex-end',
@@ -124,8 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: Platform.OS === 'web' ? 10 : -3,
   },
-  searchSwitch: {
-  },
-})
+  searchSwitch: {},
+});
 
 export default SettingsModal;

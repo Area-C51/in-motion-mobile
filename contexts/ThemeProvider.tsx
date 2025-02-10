@@ -3,7 +3,9 @@
 // also persists the theme preference across app sessions using AsyncStorage
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, Image, useColorScheme as useSystemColorScheme, View  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Colors } from '@/constants/Colors';
 
 export type Theme = 'light' | 'dark' | 'system';
 
@@ -18,7 +20,8 @@ export const ThemeContext = createContext<ThemeContextProps | undefined>(undefin
 // ThemeProvider, a React component that uses the context to provide the theme and a method to update it to all child components
 // it’s wrapped around the root of the app (or parts of it), /app/_layout.tsx, to make the theme and its setter globally accessible
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('system'); // holds the theme state with useState, default to 'system' theme setting
+  const [theme, setTheme] = useState<Theme | null>(null); // holds the theme state with useState, defaults to 'null' initially
+  const systemTheme = useSystemColorScheme() ?? 'light'; // get system theme, defaults to 'light'
 
   // load theme from local storage (AsyncStorage) when the app starts
   useEffect(() => {
@@ -26,9 +29,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       try{
         const storedTheme = await AsyncStorage.getItem('app-theme');
         // console.log("Loaded theme from storage:", storedTheme); // for debugging
-        if (storedTheme) setTheme(storedTheme as Theme); // if no storedTheme, theme remains as default of 'system'
+        setTheme(storedTheme as Theme || 'system'); // default to 'system' if no theme is stored
+        // if (storedTheme) setTheme(storedTheme as Theme); // if no storedTheme, theme remains as default of 'system' <depracated with updated logic with 'null' and theme loading splash screen>
       } catch (error) {
         console.error('Failed to load theme preference', error);
+        setTheme('system'); // fallback
       }
     };
     loadTheme();
@@ -44,6 +49,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       console.error('Failed to save theme preference', error);
     }
   };
+
+  // show splash screen while loading theme
+  if (theme === null) {
+    const backgroundColor = systemTheme === 'light' ? Colors.light.background : Colors.dark.background;
+    const logo = systemTheme === 'light' ? require('@/assets/in-motion-blue-icon.png') : require('@/assets/in-motion-red-icon.png'); // Ensure logo assets exist
+
+    return (
+      <View style={{ flex: 1, backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={logo} style={{ width: 200, height: 200 }} resizeMode="contain" />
+        <ActivityIndicator size="large" color={systemTheme === 'dark' ? '#fff' : '#000'} />
+      </View>
+    );
+  }
 
   // with ThemeContext.Provider, ThemeProvider wraps its children, allows child components access to the current theme
   return (

@@ -15,7 +15,7 @@ export type ThemedViewProps = ViewProps & {
   defaultBackgroundImage?: ImageSourcePropType;
 };
 
-export default function ThemedView({
+export function ThemedView({
   style,
   lightColor,
   darkColor,

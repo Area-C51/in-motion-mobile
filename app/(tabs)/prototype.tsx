@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
-import ThemedText from '@/components/ThemedText';
-import ThemedView from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import ThemeSelectorModal from '@/components/sideMenu/ThemeSelectorModal';
 
 export default function SettingsScreen() {
@@ -14,21 +14,23 @@ export default function SettingsScreen() {
   // these styles are used on its root View and child elements rather than declaring styles in this file
 
   return (
-    <ThemedView showDefaultBackgroundImage={false} >
+    <ThemedView showDefaultBackgroundImage={false}>
       <ThemedText type='title'>This is a title</ThemedText>
       <ThemedText type='subtitle'>
-        This is default text that will be black in light mode and white in dark mode.
+        This is default text that will be black in light mode and white in dark
+        mode.
       </ThemedText>
       <View>
-        <ThemedText>
-          This box has a themed border.
-        </ThemedText>
+        <ThemedText>This box has a themed border.</ThemedText>
       </View>
-      
+
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <ThemedText>Change Theme</ThemedText>
       </TouchableOpacity>
-      <ThemeSelectorModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+      <ThemeSelectorModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </ThemedView>
   );
 }
