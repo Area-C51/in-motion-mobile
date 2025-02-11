@@ -1,8 +1,10 @@
 import React from 'react';
-import { Image, Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Image, Dimensions, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
+import { ThemedText } from '@/components/ThemedText';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+
 
 // interface to define types for the Exercise object
 export interface Exercise {
@@ -22,7 +24,6 @@ const scaleFontSize = (size: number) => {
 };
 
 interface ExerciseItemProps {
-  iconColor: string;
   exercise: Exercise;
   expandedExerciseId: string | null;
   setExpandedExerciseId: (id: string | null) => void;
@@ -31,19 +32,20 @@ interface ExerciseItemProps {
 
 // ExerciseItem component with TS type React.FC (React Function Component), tells TS that this component is a function component whose props match the ExerciseItemProps interface and automatically adds type checking for the props
 const ExerciseItem: React.FC<ExerciseItemProps> = ({
-  iconColor,
   exercise, // contains the data for each specific exercise, e.g., id, images, etc.
   // with modularized code, necessary pieces of state and their updated functions are passed as props (below), decoupling the component from the parent’s state management and making the component reusable elsewhere, e.g., saved user workouts
   expandedExerciseId,
   setExpandedExerciseId,
   setSelectedImage,
 }) => {
+  const theme = useColorScheme();
+  const tStyles = getGlobalStyles(theme);
   const isExpanded = expandedExerciseId === exercise.id;
 
   return (
-    <View style={styles.resultItem}>
+    <View style={[tStyles.card, styles.resultItem]}>
       <View style={styles.headerRow}>
-        <Text style={styles.exerciseName}>{exercise.name}</Text>
+        <ThemedText type='title' style={styles.exerciseName}>{exercise.name}</ThemedText>
         <View style={styles.iconRow}>
         <TouchableOpacity
           // style={styles.}
@@ -54,7 +56,7 @@ const ExerciseItem: React.FC<ExerciseItemProps> = ({
           focusable={true} // ensures focusable with keyboard navigation or screen reader
           onFocus={() => console.log("Button focused")}
         >
-          <IconSymbol size={scaleFontSize(26)} name={'info.circle'} color={iconColor} />
+          <IconSymbol size={scaleFontSize(22)} name={'info.circle'} color={isExpanded ? tStyles.iconColorActive : tStyles.iconColor} />
         </TouchableOpacity>
         <TouchableOpacity
           // style={styles.}
@@ -65,7 +67,7 @@ const ExerciseItem: React.FC<ExerciseItemProps> = ({
           focusable={true}
           onFocus={() => console.log("Button focused")}
         >
-          <IconSymbol size={scaleFontSize(26)} name={'bookmark'} color={iconColor} />
+          <IconSymbol size={scaleFontSize(22)} name={'bookmark'} color={tStyles.iconColor} />
         </TouchableOpacity>
         <TouchableOpacity
           // style={styles.}
@@ -76,7 +78,7 @@ const ExerciseItem: React.FC<ExerciseItemProps> = ({
           focusable={true}
           onFocus={() => console.log("Button focused")}
         >
-          <IconSymbol size={scaleFontSize(26)} name={'arrowshape.turn.up.right'} color={iconColor} />
+          <IconSymbol size={scaleFontSize(22)} name={'arrowshape.turn.up.right'} color={tStyles.iconColor} />
         </TouchableOpacity>
       </View>
     </View>
@@ -105,7 +107,7 @@ const ExerciseItem: React.FC<ExerciseItemProps> = ({
           </Pressable>
         ))
       ) : (
-        <Text>No images available</Text> // fallback if `exercise.images` isn't an array
+        <ThemedText>No images available</ThemedText> // fallback if `exercise.images` isn't an array
       )}
     </View>
 
@@ -116,21 +118,21 @@ const ExerciseItem: React.FC<ExerciseItemProps> = ({
           accessibilityLabel="Expanded Exercise Details"
           accessibilityHint={`Tap to collapse exercise details for ${exercise.name}`}
         >
-          {/* <Text>
-            <Text style={styles.boldText}>Force:</Text> {exercise.force}
-          </Text>
-          <Text>
-            <Text style={styles.boldText}>Level:</Text> {exercise.level}
-          </Text>
-          <Text>
-            <Text style={styles.boldText}>Mechanic:</Text> {exercise.mechanic}
-          </Text>
-          <Text>
-            <Text style={styles.boldText}>Equipment:</Text> {exercise.equipment}
-          </Text> */}
-          <Text style={styles.expandedText}>
-            <Text style={styles.boldText}>Instructions:</Text> {exercise.instructions}
-          </Text>
+          {/* <ThemedText>
+            <ThemedText style={styles.boldText}>Force:</ThemedText> {exercise.force}
+          </ThemedText>
+          <ThemedText>
+            <ThemedText style={styles.boldText}>Level:</ThemedText> {exercise.level}
+          </ThemedText>
+          <ThemedText>
+            <ThemedText style={styles.boldText}>Mechanic:</ThemedText> {exercise.mechanic}
+          </ThemedText>
+          <ThemedText>
+            <ThemedText style={styles.boldText}>Equipment:</ThemedText> {exercise.equipment}
+          </ThemedText> */}
+          <ThemedText type="text">
+            <ThemedText style={styles.boldText}>Instructions:</ThemedText> {exercise.instructions}
+          </ThemedText>
         </View>
       )}
     </View>
@@ -145,17 +147,13 @@ const styles = StyleSheet.create({
   // Exercise Header
   headerRow: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.90)',
     alignItems: 'center',
     justifyContent: 'space-between',
     // marginBottom: 5,
   },
   exerciseName: {
     flex: 1,
-    fontSize: scaleFontSize(18), // relative to screen width
-    fontWeight: '700',
+    fontSize: scaleFontSize(18), // relative to screen width, overrides ThemedText fontSize
     padding: 6,
     textAlign: 'left',
   },
@@ -168,6 +166,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingHorizontal: 8,
     justifyContent: 'flex-start',
     marginVertical: 5,
   },
@@ -182,15 +181,7 @@ const styles = StyleSheet.create({
   
   // Exercise Expanded
   expandedDetails: {
-    borderWidth: 1,
-    borderColor: '#888',
-    borderRadius: 10,
     padding: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.90)',
-    // marginTop: 5,
-  },
-  expandedText: {
-    fontSize: 14,
   },
   boldText: {
     fontWeight: '700',

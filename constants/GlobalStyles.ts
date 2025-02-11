@@ -40,6 +40,8 @@ export const GlobalStyles = StyleSheet.create({
     width: width * 0.4,
     // fontSize: 16, // placeholder, defaults to type={'text'}
     // color: 'white', // placeholder, defaults to type={'text'}
+    borderWidth: 1, // placeholder before images
+    borderColor: 'white', // placeholder before images
     borderRadius: 10,
     textAlign: 'justify', // placeholder
     padding: 10, // placeholder
@@ -103,19 +105,29 @@ export const GlobalStyles = StyleSheet.create({
 });
 
 // function to generate theme-dependent styles
-export const getGlobalStyles = (theme: 'light' | 'dark') =>
-  StyleSheet.create({
+export const getGlobalStyles = (theme: 'light' | 'dark') => {
+  const styles = StyleSheet.create({
     // container: {
     //   backgroundColor: Colors[theme].background,
     // },
     card: {
       backgroundColor: Colors[theme].cardBackground,
-      borderColor: Colors[theme].border,
+      // borderColor: Colors[theme].border,
       borderWidth: 1,
       borderRadius: 10,
       padding: 10,
     },
-    placeholder: { // used when list content does not exist, i.e., exercise and workout search results
+    searchTextInput: {
+      height: 45,
+      width: '100%',
+      fontSize: 16, // search bar is a set height, thus font is set size
+      fontWeight: '400',
+      color: Colors[theme].text,
+      paddingLeft: 40, // space for the submit button
+      paddingRight: 70, // space for the "X" and search menu buttons
+      backgroundColor: Colors[theme].cardBackground,
+    },
+      placeholder: { // used when list content does not exist, i.e., exercise and workout search results
       top: height * 0.1,
       // fontSize: scaleFontSize(18), // relative to screen width
       fontSize: 22,
@@ -131,3 +143,13 @@ export const getGlobalStyles = (theme: 'light' | 'dark') =>
       paddingLeft: 20,
     },
   });
+
+  // iconColor is a color value and not a valid style property, needs to be outside of StyleSheet.create()
+  // it is instead returned as a separate property
+  // allows access to tStyles.iconColor without triggering a type error and avoiding passing iconColor as a prop in components
+  return {
+    ...styles,
+    iconColor: Colors[theme].text, // reuse text theme color to avoid making a new type
+    iconColorActive: Colors[theme].tint,
+  };
+};

@@ -34,8 +34,6 @@ const scaleFontSize = (size: number) => {
 // },
 
 function Search() {
-  const [iconColor, setIconColor] = useState('#000'); // IconSymbol requires a color prop, this allows dynamic colors, possible use with themes
-
   const [muscleOptions, setMuscleOptions] = useState([]); // state for muscle options
   const [categoryOptions, setCategoryOptions] = useState([]); // state for category options
   const [fetchDropdownOptions, setFetchDropdownOptions] = useState(true); // status flag to ensure dropdown options data only occurs once
@@ -157,11 +155,10 @@ function Search() {
 
     try {
       const query = new URLSearchParams(queryParams.searchEntry).toString();
-
+      // fetch AI response from the back-end
       const response = await fetch(
         `http://localhost:8080/api/aisearch?${query}`,
         {
-          // fetch AI response from the back-end
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -188,7 +185,6 @@ function Search() {
   // each exercise item of the results container
   const renderExerciseItem = ({ item }: { item: Exercise }) => (
     <ExerciseItem
-      iconColor={iconColor}
       exercise={item}
       expandedExerciseId={expandedExerciseId}
       setExpandedExerciseId={setExpandedExerciseId}
@@ -210,7 +206,6 @@ function Search() {
           aiExerciseSearch={aiExerciseSearch}
           exerciseSearch={exerciseSearch}
           toggleSearchModal={toggleSearchModal}
-          iconColor={iconColor}
           dropdownsEnabled={dropdownsEnabled}
           muscle={muscle}
           setMuscle={setMuscle}

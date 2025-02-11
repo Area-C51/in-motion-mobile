@@ -25,7 +25,7 @@ const MAPPING = {
   'wand.and.rays.inverse': 'auto-fix-high',
   'line.horizontal.3': 'menu-open', // search settings menu
   'magnifyingglass': 'search', // dropdown submit button
-  'xmark': 'remove', // tbd
+  'xmark': 'highlight-remove', // clear search bar
   'ellipsis': 'menu', // tbd
   'info.circle' : 'info-outline',
   'info.circle.fill' : 'info',

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
+import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 interface SearchBarProps {
@@ -10,7 +13,6 @@ interface SearchBarProps {
   aiExerciseSearch: () => void;
   exerciseSearch: () => void;
   toggleSearchModal: () => void;
-  iconColor: string;
   dropdownsEnabled: boolean;
   muscle: string;
   setMuscle: (value: string) => void;
@@ -27,7 +29,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
   aiExerciseSearch,
   exerciseSearch,
   toggleSearchModal,
-  iconColor,
   dropdownsEnabled,
   muscle,
   setMuscle,
@@ -36,12 +37,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
   muscleOptions,
   categoryOptions,
 }) => {
+  const theme = useColorScheme();
+  const tStyles = getGlobalStyles(theme);
+  
   return (
     <View style={styles.container}>
       {/* Search container, runs basic or AI assisted search if toggled on */}
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.searchTextInput}
+          style={tStyles.searchTextInput}
           placeholder="Search exercises by name"
           value={searchEntry} // bind the TextInput to state
           onChangeText={setSearchEntry} // update the searchEntry state as the user types
@@ -61,7 +65,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           focusable={true}
           onFocus={() => console.log("Search button focused")}
         >
-          <IconSymbol size={28} name={'magnifyingglass'} color={iconColor} />
+          <IconSymbol size={26} name={'magnifyingglass'} color={tStyles.iconColor} />
         </TouchableOpacity>
 
         {/* Clear button is conditionally displayed if actively searching */}
@@ -75,7 +79,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             focusable={true}
             onFocus={() => console.log("Button focused")}      
           >
-            <Text style={styles.clearText}>X</Text>
+            <IconSymbol size={26} name={'xmark'} color={tStyles.iconColor} />
           </TouchableOpacity>
         ) : null}
 
@@ -89,7 +93,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           focusable={true}
           onFocus={() => console.log("Button focused")}
         >
-          <IconSymbol size={28} name={'line.horizontal.3'} color={iconColor} />
+          <IconSymbol size={26} name={'line.horizontal.3'} color={tStyles.iconColor} />
         </TouchableOpacity>
       </View>
 
@@ -135,16 +139,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
   },
-  searchTextInput: {
-    height: 45,
-    width: '100%',
-    fontSize: 16, // search bar is a set height, thus font is set size
-    borderWidth: 1,
-    borderColor: '#aaa',
-    paddingLeft: 40, // space for the submit button
-    paddingRight: 70, // space for the "X" and search menu buttons
-    backgroundColor: '#fff',
-  },
   submitButton: {
     position: 'absolute',
     height: 45,
@@ -155,16 +149,10 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     position: 'absolute',
-    right: 20,
+    right: 15,
     height: 45,
     width: 50,
-    paddingLeft: 10,
     justifyContent: 'center',
-  },
-  clearText: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#999',
   },
   searchSettingsButton: {
     position: 'absolute',
@@ -175,8 +163,7 @@ const styles = StyleSheet.create({
     borderColor: '#aaa',
     borderTopLeftRadius: 25,
     borderBottomLeftRadius: 25,
-    padding: 5,
-    // backgroundColor: '#fff', // only to visualize the button over the search bar
+    paddingLeft: 8,
     alignContent: 'center',
     justifyContent: 'center',
   },
