@@ -1,12 +1,12 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
-import { ThemedText } from '@/components/ThemedText';
+import { getGlobalStyles } from '@/constants/GlobalStyles';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 interface SearchBarProps {
+  isMenuVisible: boolean;
   searchEntry: string;
   setSearchEntry: (text: string) => void;
   aiEnabled: boolean;
@@ -23,6 +23,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
+  isMenuVisible,
   searchEntry,
   setSearchEntry,
   aiEnabled,
@@ -93,7 +94,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           focusable={true}
           onFocus={() => console.log("Button focused")}
         >
-          <IconSymbol size={26} name={'line.horizontal.3'} color={tStyles.iconColor} />
+          <IconSymbol size={26} name={'line.horizontal.3'} color={isMenuVisible ? tStyles.iconColorActive : tStyles.iconColor} />
         </TouchableOpacity>
       </View>
 
@@ -103,8 +104,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <Picker
           selectedValue={muscle}
           onValueChange={(itemValue) => setMuscle(itemValue)}
-          style={styles.dropdown}
-          >
+          style={tStyles.picker}
+        >
             <Picker.Item label="Select Muscle" value="" />
             {muscleOptions.map((m, index) => (
               <Picker.Item key={index} label={m} value={m} />
@@ -115,7 +116,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <Picker
             selectedValue={category}
             onValueChange={(itemValue) => setCategory(itemValue)}
-            style={styles.dropdown}
+            style={tStyles.picker}
           >
             <Picker.Item label="Select Category" value="" />
             {categoryOptions.map((c, index) => (
@@ -167,7 +168,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
   },
-
   // Dropdown Options
   dropdownContainer: {
     flexDirection: 'row',
@@ -179,11 +179,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  dropdown: {
-    height: Platform.OS === 'web' ? 40 : 50,
-    width: '50%',
-    fontSize: 16,
   },
 })
 

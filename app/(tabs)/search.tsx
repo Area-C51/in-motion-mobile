@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
+import {
+  getGlobalStyles,
+  GlobalStyles as gStyles,
+} from '@/constants/GlobalStyles';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
-import SettingsModal from '@/components/search/SettingsModal';
+import SearchSettingsModal from '@/components/search/SearchSettingsModal';
 import ExerciseItem, { Exercise } from '@/components/search/ExerciseItem';
 import ImageModal from '@/components/search/ImageModal';
 
@@ -34,24 +45,26 @@ const scaleFontSize = (size: number) => {
 // },
 
 function Search() {
-  const [muscleOptions, setMuscleOptions] = useState([]); // state for muscle options
-  const [categoryOptions, setCategoryOptions] = useState([]); // state for category options
-  const [fetchDropdownOptions, setFetchDropdownOptions] = useState(true); // status flag to ensure dropdown options data only occurs once
-
-  const [searchEntry, setSearchEntry] = useState(''); // sets state for searchEntry to user input text
+  // dropdown options and flag
+  const [fetchDropdownOptions, setFetchDropdownOptions] = useState(true); // flag to ensure fetching dropdown options only occurs once
+  const [muscleOptions, setMuscleOptions] = useState([]); // holds fetched muscle options
+  const [categoryOptions, setCategoryOptions] = useState([]); // holds fetched category options
+  // submitted search input(s)
+  const [searchEntry, setSearchEntry] = useState('');
   const [muscle, setMuscle] = useState('');
   const [category, setCategory] = useState('');
-
-  const [responseResults, setResponseResults] = useState<Exercise[]>([]); // sets state for responseResults, db results from back-end
+  // returned response data
+  const [responseResults, setResponseResults] = useState<Exercise[]>([]); // state for db results from back-end
   const [aiResponse, setAIResponse] = useState('');
+  // holds user active user interactions
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // state for the selected image to expand
   const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(
     null
   ); // state to track expanded exercise on click
-
+  // loading state for AI search
   const [loading, setLoading] = useState(false);
-
-  const [isMenuVisible, setIsMenuVisible] = useState(false); // search settings menu
+  // search settings modal/menu
+  const [isMenuVisible, setIsMenuVisible] = useState(false); // search settings modal/menu
   const [dropdownsEnabled, setDropdownsEnabled] = useState(false); // additional search dropdowns
   const [aiEnabled, setAiEnabled] = useState(false); // basic vs AI search
 
@@ -102,8 +115,8 @@ function Search() {
     };
   };
 
+  // basic exercise search functionality
   const exerciseSearch = async () => {
-    // basic exercise search functionality
     const { searchTerm } = getSearchInputs();
     const queryParams: QueryParams = {};
 
@@ -112,16 +125,17 @@ function Search() {
     if (muscle) queryParams.muscle = muscle;
     if (category) queryParams.category = category;
 
+    // if no filter or search term is provided, show an alert and stop the search
     if (Object.keys(queryParams).length === 0) {
-      // if no filter or search term is provided, show an alert and stop the search
       Alert.alert('Please enter a search term or select a filter');
       return;
     }
 
     try {
+      // construct the query string using URLSearchParams directly from queryParams
       const query = new URLSearchParams(
         queryParams as Record<string, string>
-      ).toString(); // construct the query string using URLSearchParams directly from queryParams
+      ).toString();
       // console.log(query); // for debugging
       const response = await fetch(`http://localhost:8080/api/search?${query}`);
       // console.log(response); // for debugging
@@ -135,8 +149,8 @@ function Search() {
     }
   };
 
+  // AI-assisted exercise search functionality
   const aiExerciseSearch = async () => {
-    // AI-assisted exercise search functionality
     const { searchTerm } = getSearchInputs();
     const queryParams: QueryParams = {}; // initial queryParams object
 
@@ -176,7 +190,9 @@ function Search() {
       // setSearchEntry(''); // resets search box to an empty string after each search
     } catch (error) {
       console.error('Error: ', error);
-      Alert.alert('Something went wrong with the AI assisted query. Please try again.');
+      Alert.alert(
+        'Something went wrong with the AI assisted query. Please try again.'
+      );
     } finally {
       setLoading(false); // stop loading when done
     }
@@ -200,6 +216,7 @@ function Search() {
     >
       <View style={gStyles.contentContainer}>
         <SearchBar
+          isMenuVisible={isMenuVisible}
           searchEntry={searchEntry}
           setSearchEntry={setSearchEntry}
           aiEnabled={aiEnabled}
@@ -214,7 +231,7 @@ function Search() {
           muscleOptions={muscleOptions}
           categoryOptions={categoryOptions}
         />
-        <SettingsModal
+        <SearchSettingsModal
           isMenuVisible={isMenuVisible}
           toggleSearchModal={toggleSearchModal}
           dropdownsEnabled={dropdownsEnabled}

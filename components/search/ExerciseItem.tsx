@@ -1,10 +1,9 @@
 import React from 'react';
 import { Image, Dimensions, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
+import { getGlobalStyles } from '@/constants/GlobalStyles';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-
 
 // interface to define types for the Exercise object
 export interface Exercise {
@@ -143,13 +142,10 @@ const styles = StyleSheet.create({
   resultItem: {
     marginTop: 15,
   },
-
-  // Exercise Header
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // marginBottom: 5,
   },
   exerciseName: {
     flex: 1,
@@ -161,8 +157,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
-  // Exercise Images
   imageContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -178,8 +172,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 20,
   },
-  
-  // Exercise Expanded
   expandedDetails: {
     padding: 8,
   },

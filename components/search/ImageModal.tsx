@@ -12,20 +12,20 @@ const ImageModal: React.FC<ImageModalProps> = ({
   setSelectedImage,
   fadeDuration = 300, // default to 300ms if not provided
 }) => {
-  // Create an animated value for opacity
+  // create an animated value for opacity
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Run fade animation when selectedImage changes
+  // run fade animation when selectedImage changes
   useEffect(() => {
     if (selectedImage) {
-      // Fade in the entire modal content
+      // fade in the entire modal content
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: fadeDuration,
         useNativeDriver: true,
       }).start();
     } else {
-      // Fade out the modal content
+      // fade out the modal content
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: fadeDuration,
@@ -39,13 +39,11 @@ const ImageModal: React.FC<ImageModalProps> = ({
       visible={!!selectedImage}
       transparent={true}
       onRequestClose={() => setSelectedImage(null)}
-      // Turn off the built-in animation as we'll control it manually
-      animationType="none"
+      animationType="none" // no built-in animation, controlled manually
       accessibilityLabel="Image full screen view"
     >
       <Animated.View style={[styles.animatedContainer, { opacity: fadeAnim }]}>
-        {/* Using Pressable to allow the user to close the modal */}
-        <Pressable
+        <Pressable // allows the user to close the modal
           style={styles.modalBackground}
           onPress={() => setSelectedImage(null)}
           accessibilityLabel="Close the image modal"

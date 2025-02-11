@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Modal, Platform, StyleSheet, Switch, TouchableWithoutFeedback,  View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { getGlobalStyles, GlobalStyles as gStyles, SwitchColors } from '@/constants/GlobalStyles';
+import { getGlobalStyles, SwitchColors } from '@/constants/GlobalStyles';
 import { ThemedText } from '@/components/ThemedText';
 
-interface SettingsModalProps {
+interface SearchSettingsModalProps {
   isMenuVisible: boolean;
   toggleSearchModal: () => void;
   dropdownsEnabled: boolean;
@@ -13,7 +13,7 @@ interface SettingsModalProps {
   setAiEnabled: (value: boolean) => void;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({
+const SearchSettingsModal: React.FC<SearchSettingsModalProps> = ({
   isMenuVisible,
   toggleSearchModal,
   dropdownsEnabled,
@@ -115,10 +115,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    // local specific modal style
+  modalContainer: { // local specific modal style
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     alignItems: 'flex-end',
   },
   searchModal: {
@@ -147,4 +146,4 @@ const styles = StyleSheet.create({
   searchSwitch: {},
 });
 
-export default SettingsModal;
+export default SearchSettingsModal;

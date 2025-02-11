@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useTheme } from '@/hooks/useTheme';
-import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
+import { getGlobalStyles } from '@/constants/GlobalStyles';
 import { ThemedText } from '@/components/ThemedText';
 import RadioButton from '@/components/sideMenu/RadioButton';
 
@@ -24,7 +24,7 @@ const ThemeSelectorModal = ({
   const handleSelection = (newTheme: 'light' | 'dark' | 'system') => {
     setSelectedTheme(newTheme);
     setTheme(newTheme);
-    // onClose();
+    // onClose(); // immediately closes the modal when an option is selected
   };
 
   return (
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     // can be centralized to GlobalStyles if used elsewhere
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
   },

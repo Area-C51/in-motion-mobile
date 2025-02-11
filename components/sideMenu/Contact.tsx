@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   ac51Logo: {
     height: '100%',
     width: '100%',
-    // color: '#808080',
     top: 0,
     right: 100,
     position: 'absolute',

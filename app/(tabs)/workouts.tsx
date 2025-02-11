@@ -4,6 +4,10 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import SearchBar from '@/components/search/SearchBar'; // can update SearchBar to have two modals, the specific modal that opens corresponds to the screen it's on (search vs. workouts)
+import WorkoutSettingsModal from '@/components/search/WorkoutSettingsModal';
+import ExerciseItem, { Exercise } from '@/components/search/ExerciseItem';
+import ImageModal from '@/components/search/ImageModal';
 
 const { width, height } = Dimensions.get('window');
 const minScreenDimension = Math.min(width, height);

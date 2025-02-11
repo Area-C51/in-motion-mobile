@@ -13,10 +13,7 @@ const mockRow1 = [
   ['Title1.1', `Row of side scrolling workouts`],
   ['Title1.2', `With Title and random 1x1 ratio exercise image in the workout`],
   ['Title1.3', `If no workouts`],
-  [
-    'Title1.4',
-    `Display Title as 'Add New Workout' and a 1x1 icon of a + in place of an image`,
-  ],
+  ['Title1.4', `Display Title as 'Add New Workout' and a 1x1 icon of a + in place of an image`],
   ['Title1.5', 'lorem ipsum dolor sit amet'],
 ];
 const mockRow2 = [
@@ -44,11 +41,7 @@ const Home = () => {
           <ScrollView horizontal style={gStyles.displayRow}>
             {mockRow1.map((el, index) => (
               <View key={`row1-${index}`} style={gStyles.displayCard}>
-                {/* <Text style={gStyles.display}>{el[1]}</Text> */}
-                {/* <Text style={tStyles.title}>{el[0]}</Text> */}
-                <ThemedText type={'text'} style={gStyles.display}>
-                  Text Text {el[1]}
-                </ThemedText>
+                <ThemedText type={'text'} style={gStyles.display}>Text Text {el[1]}</ThemedText>
                 <ThemedText type={'detail'}>Detail Option 1</ThemedText>
                 <ThemedText type={'detail'}>Detail Option 2</ThemedText>
                 <ThemedText type={'title'}>Title Title {el[0]}</ThemedText>
@@ -93,7 +86,6 @@ export default Home;
 
 const styles = StyleSheet.create({
   displayContainer: {
-    // borderWidth: 1,
     paddingVertical: 40,
   },
 });
