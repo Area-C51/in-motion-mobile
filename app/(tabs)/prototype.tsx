@@ -14,8 +14,7 @@ export default function SettingsScreen() {
     <ThemedView showDefaultBackgroundImage={false}>
       <ThemedText type='title'>This is a title</ThemedText>
       <ThemedText type='subtitle'>
-        This is default text that will be black in light mode and white in dark
-        mode.
+        This is default text that will be black in light mode and white in dark mode.
       </ThemedText>
       <View>
         <ThemedText>This box has a themed border.</ThemedText>
@@ -24,10 +23,7 @@ export default function SettingsScreen() {
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <ThemedText>Appearance</ThemedText>
       </TouchableOpacity>
-      <ThemeSelectorModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-      />
+      <ThemeSelectorModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </ThemedView>
   );
 }

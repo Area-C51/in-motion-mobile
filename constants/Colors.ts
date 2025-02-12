@@ -25,8 +25,9 @@ export const Colors = {
     tint: tintColorLight,
     border: 'rgb(221,221,221)', // #dddddd',
     icon: 'rgb(104,112,118)', // '#687076',
-    tabIconDefault: 'hsl(0, 0.00%, 60.00%)', // 'rgb(104,112,118)', // #687076
+    tabIconDefault: 'hsl(0, 0.00%, 40.00%)', // 'rgb(104,112,118)', // #687076
     tabIconSelected: tintColorLight,
+    tabBarBackground: 'rgba(255, 255, 255, 0.7)',
   },
   dark: {
     header: 'hsl(0, 0.00%, 100%)',
@@ -45,5 +46,6 @@ export const Colors = {
     icon: 'rgb(155,161,166)', // '#9BA1A6',
     tabIconDefault: 'hsl(0, 0.00%, 60.00%)', // 'rgb(155,161,166)', // '#9BA1A6',
     tabIconSelected: tintColorDark,
+    tabBarBackground: 'rgba(0, 0, 0, 0.65)',
   },
 };

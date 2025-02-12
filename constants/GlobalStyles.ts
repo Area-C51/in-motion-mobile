@@ -17,7 +17,7 @@ export const GlobalStyles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    top: 35, // space for the status bar on mobile
+    // top: 35, // space for the status bar on mobile
   },
 
   displayRow: {

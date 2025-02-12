@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {
-  getGlobalStyles,
-  GlobalStyles as gStyles,
-} from '@/constants/GlobalStyles';
+import { getGlobalStyles, GlobalStyles as gStyles } from '@/constants/GlobalStyles';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import SearchBar from '@/components/search/SearchBar';
@@ -58,9 +47,7 @@ function Search() {
   const [aiResponse, setAIResponse] = useState('');
   // holds user active user interactions
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // state for the selected image to expand
-  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(
-    null
-  ); // state to track expanded exercise on click
+  const [expandedExerciseId, setExpandedExerciseId] = useState<string | null>(null); // state to track expanded exercise on click
   // loading state for AI search
   const [loading, setLoading] = useState(false);
   // search settings modal/menu
@@ -71,27 +58,19 @@ function Search() {
   const theme = useColorScheme();
   const tStyles = getGlobalStyles(theme);
 
-  const toggleSearchModal = () => {
-    setIsMenuVisible((prevState) => !prevState);
-  };
+  const toggleSearchModal = () => setIsMenuVisible((prevState) => !prevState);
 
   // fetch muscle and category options from back-end
   useEffect(() => {
     if (!fetchDropdownOptions) return;
     const fetchOptions = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8080/api/dropdown-options'
-        );
+        const response = await fetch('http://localhost:8080/api/dropdown-options');
         if (!response.ok) throw new Error('Failed to fetch options');
         const { muscles, categories } = await response.json();
 
-        setMuscleOptions(
-          muscles.sort((a: string, b: string) => a.localeCompare(b))
-        ); // sort and set retrieved muscle options
-        setCategoryOptions(
-          categories.sort((a: string, b: string) => a.localeCompare(b))
-        ); // sort and set retrieved category options
+        setMuscleOptions(muscles.sort((a: string, b: string) => a.localeCompare(b))); // sort and set retrieved muscle options
+        setCategoryOptions(categories.sort((a: string, b: string) => a.localeCompare(b))); // sort and set retrieved category options
         setFetchDropdownOptions(false); // set status flag to false after fetching data once
       } catch (error) {
         console.error('Error fetching options:', error);
@@ -133,9 +112,7 @@ function Search() {
 
     try {
       // construct the query string using URLSearchParams directly from queryParams
-      const query = new URLSearchParams(
-        queryParams as Record<string, string>
-      ).toString();
+      const query = new URLSearchParams(queryParams as Record<string, string>).toString();
       // console.log(query); // for debugging
       const response = await fetch(`http://localhost:8080/api/search?${query}`);
       // console.log(response); // for debugging
@@ -190,9 +167,7 @@ function Search() {
       // setSearchEntry(''); // resets search box to an empty string after each search
     } catch (error) {
       console.error('Error: ', error);
-      Alert.alert(
-        'Something went wrong with the AI assisted query. Please try again.'
-      );
+      Alert.alert('Something went wrong with the AI assisted query. Please try again.');
     } finally {
       setLoading(false); // stop loading when done
     }
@@ -248,6 +223,7 @@ function Search() {
               data={responseResults}
               renderItem={renderExerciseItem}
               keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
             />
           ) : (
             <ThemedText type='header' style={tStyles.placeholder}>

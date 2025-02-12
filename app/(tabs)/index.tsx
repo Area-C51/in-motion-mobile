@@ -29,16 +29,13 @@ const Home = () => {
   const tStyles = getGlobalStyles(theme); // get theme-aware styles
 
   return (
-    // <ThemedView showDefaultBackgroundImage={true} // needs to check {!selectedWorkout} once that is implemented
-    //   style={gStyles.mainContainer}
-    // >
-    <View style={gStyles.mainContainer}>
-      <View style={gStyles.contentContainer}>
+    <ThemedView showDefaultBackgroundImage={false} style={gStyles.mainContainer}>
+      <ScrollView style={gStyles.contentContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.displayContainer}>
           <ThemedText type={'header'} style={tStyles.header}>
             Header Header
           </ThemedText>
-          <ScrollView horizontal style={gStyles.displayRow}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={gStyles.displayRow}>
             {mockRow1.map((el, index) => (
               <View key={`row1-${index}`} style={gStyles.displayCard}>
                 <ThemedText type={'text'} style={gStyles.display}>Text Text {el[1]}</ThemedText>
@@ -56,7 +53,7 @@ const Home = () => {
           <ThemedText type={'header'} style={tStyles.header}>
             Recent Workouts
           </ThemedText>
-          <ScrollView horizontal style={gStyles.displayRow}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={gStyles.displayRow}>
             {mockRow1.map((el, index) => (
               <View key={`row1-${index}`} style={gStyles.displayCard}>
                 <Text style={gStyles.display}>{el[1]}</Text>
@@ -67,7 +64,7 @@ const Home = () => {
         </View>
         <View style={styles.displayContainer}>
           <ThemedText style={tStyles.header}>Fresh Finds</ThemedText>
-          <ScrollView horizontal style={gStyles.displayRow}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={gStyles.displayRow}>
             {mockRow2.map((el, index) => (
               <View key={`row2-${index}`} style={gStyles.displayCard}>
                 <Text style={gStyles.display}>{el[1]}</Text>
@@ -76,9 +73,8 @@ const Home = () => {
             ))}
           </ScrollView>
         </View>
-      </View>
-    </View>
-    // </ThemedView>
+      </ScrollView>
+    </ThemedView>
   );
 };
 

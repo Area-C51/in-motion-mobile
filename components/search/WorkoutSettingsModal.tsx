@@ -13,7 +13,7 @@ const WorkoutSettingsModal: React.FC<WorkoutSettingsModalProps> = ({
   const slideAnim = useRef(new Animated.Value(150)).current; // search settings menu, initial position is off-screen
 
   return (
-    <Modal></Modal>
+    <Modal>A way to sort workouts by recency or alphabetical order. Maybe a combination of radio buttons as indicators and swiches for each option, the last switched option focuses the corresponding radio button. Or a drop down with all 4 options.</Modal>
   );
 };
 

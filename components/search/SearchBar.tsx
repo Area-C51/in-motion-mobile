@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors'
 import { getGlobalStyles } from '@/constants/GlobalStyles';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
@@ -48,6 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <TextInput
           style={tStyles.searchTextInput}
           placeholder="Search exercises by name"
+          placeholderTextColor={Colors[theme].text} // requires text color to be explicitly set for the placeholder on mobile (Android)
           value={searchEntry} // bind the TextInput to state
           onChangeText={setSearchEntry} // update the searchEntry state as the user types
           onSubmitEditing={aiEnabled ? aiExerciseSearch : exerciseSearch} // trigger search when "Enter" is pressed

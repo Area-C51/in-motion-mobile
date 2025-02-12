@@ -87,7 +87,7 @@ _temp/
 coverage/
 
 # Other files
-local-README.md
+local*.md
 *copy.tsx
 *copy.txt
 upload-exercises.js

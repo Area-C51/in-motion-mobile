@@ -1,36 +1,58 @@
-import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-
+import { Tabs } from 'expo-router';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors';
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import Header from "@/components/header/Header";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const activeColor = Colors[colorScheme ?? 'light'].tint;
-  const inactiveColor = '#888';
 
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: activeColor,
-        tabBarInactiveTintColor: inactiveColor,
-        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        // headerTitleAlign: 'center',
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault, // previously '#888'
+        headerShown: true, // instead of default header, using custom header
+        // headerTitleAlign: 'center', // using default left align
         tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
+        tabBarBackground: TabBarBackground, // component used to customize the background of the bottom tab bar, e.g., blur effects (e.g., on iOS, making the tab bar look semi-transparent), custom gradients, dynamic backgrounds
         tabBarStyle: Platform.select({
-          // use a transparent background on iOS to show the blur effect
-          ios: { position: 'absolute' },
+          ios: { position: 'absolute' }, // transparent background on iOS for blur effect
+          android: {
+            backgroundColor: 'transparent', // necessary for semi-transparent blur
+            position: 'absolute', // optional, to help with proper rendering
+          },
+          web: {
+            backgroundColor: 'transparent',
+            position: 'absolute',
+          },
           default: {},
         }),
-        tabBarLabelPosition: 'below-icon', // places labels below the icons
-      }}>
+        tabBarLabelPosition: 'below-icon',
+
+        // custom header logic
+        header: () => {
+          let rightButton = null;
+
+          if (route.name === 'search') {
+            rightButton = (
+              <IconSymbol
+                size={24}
+                name="magnifyingglass.circle.fill"
+                color="white"
+                // style={{ marginRight: 15 }}
+                // onPress={() => alert('Search tapped')} // placeholder
+              />
+            );
+          }
+          return <Header title={route.name.toUpperCase()} rightButton={rightButton} />; // custom header component per screen
+        },
+      })}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -97,7 +119,7 @@ export default function TabLayout() {
         name="prototype"
         options={{
           title: 'Prototype',
-          headerTitle: 'Prototype Screen',
+          // headerTitle: 'Prototype Screen',
           // headerShown: true, // shows header unlike the other screens
           tabBarIcon: ({ color, focused }) => (
             <IconSymbol size={28} name={focused ? 'wand.and.rays.inverse' : 'wand.and.stars'} color={color} accessibilityLabel='Prototype Tab' accessibilityHint='Navigate to the Prototype screen.' />
